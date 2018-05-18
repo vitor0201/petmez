@@ -1,0 +1,23 @@
+{
+  "expo": {
+    "sdkVersion": "26.0.0",
+    "facebookAppId":"1711396202232786",
+    "facebookDisplayName": "PetMe",
+    "icon": "./assets/icon.png",
+    "version": "1.0",
+    "name": "PetMe",
+    "slug": "petme",
+    "splash": {
+      "image": "./assets/icon.png"
+    },
+    "ios": {
+      "bundleIdentifier": "com.greycat.petme",
+      "infoPlist": {
+        "NSLocationWhenInUseUsageDescription": "Permita o PetMe utilizar sua localização para a adoção !!!"
+      }
+    },
+    "android": {
+      "package": "com.greycat.petme"
+    }
+  }
+}
