@@ -4,7 +4,15 @@
     // For more information, visit: https://go.microsoft.com/fwlink/?linkid=830387
     "version": "0.2.0",
     "configurations": [
-        
+        {
+            "name": "Debug in Exponent",
+            "program": "${workspaceRoot}/.vscode/launchReactNative.js",
+            "type": "reactnative",
+            "request": "launch",
+            "platform": "exponent",
+            "sourceMaps": true,
+            "outDir": "${workspaceRoot}/.vscode/.react"
+        },
         {
             "name": "Debug Android",
             "program": "${workspaceRoot}/.vscode/launchReactNative.js",
@@ -38,7 +46,8 @@
             "request": "launch",
             "platform": "exponent",
             "sourceMaps": true,
-            "outDir": "${workspaceRoot}/.vscode/.react"
+            "outDir": "${workspaceRoot}/.vscode/.react",
+            "internalDebuggerPort": 9090
         }
     ]
 }

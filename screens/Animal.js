@@ -20,8 +20,8 @@ class Animal extends React.Component {
   }
 
   componentWillMount() {
-    console.log(" --- AQUI ---");
-    console.log(this.props.user.animals);
+    this.props.user.animals;
+    this.props.user;
     //   for (let x of this.props.user.animals) {
     //     console.log(x);
     //     // console.log(this.props.user.animals[x]);
@@ -45,7 +45,7 @@ class Animal extends React.Component {
   }
 
   render() {
-    console.log(this.props.user);
+    this.props.user;
 
     return (
       <ScrollView>

@@ -24,26 +24,30 @@ class Profile extends React.Component {
   }
 
   componentWillMount() {
-    let bacon = this.props.user.animals.map(animals => (console.log({ id: animals.nome })));
+    // let bacon = 2;
+    // let bacon = this.props.user.animals.map(animals => (console.log({ id: animals.nome })));
     // console.log(bacon);
   }
 
   render() {
+    let bacon = 3;
     return (
       <ScrollView>
+        <Text>Vitor</Text>
         <View style={[styles.container, styles.center, styles.border]}>
           <View style={styles.container}>
             <Image style={styles.img} source={{ uri: this.props.user.photoUrl }} />
             <Text style={[styles.center, styles.bold]} >{this.props.user.name}</Text>
           </View>
           <View style={[styles.imgRow, styles.center]}>
-            {this.props.user.images.map((uri, key) => {
+            {this.props.user.animals.map((animal, key) => {
               return (
                 <TouchableOpacity key={{ key }} onPress={this.deleteImage.bind({ self: this, key: key })} >
-                  <Image style={styles.img} source={{ uri: uri }} />
+                  <Image style={styles.img} source={{ uri: animal.image }} />
                 </TouchableOpacity>
               );
             })}
+
             <TouchableOpacity style={[styles.img, styles.center]} onPress={() => this.props.navigation.navigate("Animal")}>
               <Ionicons name="ios-add" size={75} style={styles.color} />
             </TouchableOpacity>

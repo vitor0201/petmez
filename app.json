@@ -1,7 +1,7 @@
 {
   "expo": {
     "sdkVersion": "26.0.0",
-    "facebookAppId":"1711396202232786",
+    "facebookAppId": "1711396202232786",
     "facebookDisplayName": "PetMe",
     "icon": "./assets/icon.png",
     "version": "1.0",
