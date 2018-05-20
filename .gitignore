@@ -19,6 +19,8 @@ yarn-error.log*
 ### MINHAS CONFIG ####
 /config/*
 ./app.json
+./.eslintrc.js
+./.eslintrc.json
 
 # Created by https://www.gitignore.io/api/reactnative,visualstudiocode
 

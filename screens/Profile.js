@@ -47,9 +47,6 @@ class Profile extends React.Component {
             <TouchableOpacity style={[styles.img, styles.center]} onPress={() => this.props.navigation.navigate("Animal")}>
               <Ionicons name="ios-add" size={75} style={styles.color} />
             </TouchableOpacity>
-            {/* <TouchableOpacity style={[styles.img, styles.center]} onPress={this.addImage.bind(this)}>
-              <Ionicons name="ios-add" size={75}  style={styles.color} />
-            </TouchableOpacity> */}
           </View>
           <Text style={styles.bold}>About</Text>
           <TextInput
