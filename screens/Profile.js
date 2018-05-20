@@ -1,8 +1,8 @@
 import React from 'react';
-import styles from '../styles'
 import { connect } from 'react-redux';
 import { Ionicons } from '@expo/vector-icons';
-import { uploadImages, deleteImage, updateAbout, logout } from '../redux/actions'
+import styles from '../styles'
+import { uploadImages, deleteImage, updateAbout, logout } from '../redux/actions';
 
 import {
   Text,
