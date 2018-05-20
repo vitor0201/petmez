@@ -58,6 +58,7 @@ class Animal extends React.Component {
           onChangeText={(text) => this.props.dispatch(addAnimal(text, this.props.user.animals))}
           // value={this.props.user.aboutMe} 
           />
+          
         {/* {this.props.user.animals.map((uri, key) => {
                 return (
                   <TouchableOpacity key={{ key }} onPress={this.deleteImage.bind({ self: this, key: key })} >

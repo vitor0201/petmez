@@ -87,7 +87,11 @@ export function getLocation() {
     })
   }
 }
-
+/**
+ * 
+ * @param {*} images 
+ * TODO: Transformar uploadImages(images) em função pura
+ */
 export function uploadImages(images) {
   return function (dispatch) {
     ImagePicker.launchImageLibraryAsync({ allowsEditing: false }).then(function (result) {
