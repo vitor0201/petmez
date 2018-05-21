@@ -33,7 +33,6 @@ class Profile extends React.Component {
     let bacon = 3;
     return (
       <ScrollView>
-        <Text>Vitor</Text>
         <View style={[styles.container, styles.center, styles.border]}>
           <View style={styles.container}>
             <Image style={styles.img} source={{ uri: this.props.user.photoUrl }} />

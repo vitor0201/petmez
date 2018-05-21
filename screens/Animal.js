@@ -6,34 +6,23 @@ import { uploadImages, deleteImage, updateAbout, addAnimal } from '../redux/acti
 import * as firebase from 'firebase';
 import {
   Text,
+  Picker,
   View,
   Image,
   TouchableOpacity,
   TextInput,
-  ScrollView
+  ScrollView,
+
 } from 'react-native';
 
 class Animal extends React.Component {
 
   state = {
-    animals: [],
-  }
-
-  componentWillMount() {
-    this.props.user.animals;
-    this.props.user;
-    //   for (let x of this.props.user.animals) {
-    //     console.log(x);
-    //     // console.log(this.props.user.animals[x]);
-    // }
-    firebase.database().ref('cards/' + this.props.user.id + '/animals').on('value', (snap) => {
-      var items = [];
-      snap.forEach((child) => {
-        item = child.val()
-        items.push(item);
-      });
-      this.setState({ animals: items.reverse() });
-    });
+    nome: '',
+    tipo: '',
+    sexo: '',
+    tamanho: '',
+    user: ''
   }
 
   deleteImage() {
@@ -43,30 +32,60 @@ class Animal extends React.Component {
   addImage() {
     this.props.dispatch(uploadImages(this.props.user.images))
   }
+  addAnimal() {
+    console.log("LU");
+    console.log(this.state);
+    console.log("/LU");
 
+    this.props.dispatch(addAnimal(this.state.nome, this.props.user.animals));
+  }
   render() {
     this.props.user;
 
     return (
       <ScrollView>
 
-        <Text>FRAAN</Text>
+        <Text>Nome</Text>
         <TextInput
           style={styles.textInput}
           multiline={true}
           numberOfLines={5}
-          onChangeText={(text) => this.props.dispatch(addAnimal(text, this.props.user.animals))}
-          // value={this.props.user.aboutMe} 
-          />
-          
-        {/* {this.props.user.animals.map((uri, key) => {
-                return (
-                  <TouchableOpacity key={{ key }} onPress={this.deleteImage.bind({ self: this, key: key })} >
-                    <Image style={styles.img} source={{ uri: uri }} />
-                  </TouchableOpacity>
-                );
-              })} */}
+          onChangeText={(nome) => this.setState({ nome: nome })}
+          value={this.state.nome}
+        />
+        <Text>Tipo</Text>
+        <Picker
+          selectedValue={this.state.tipo}
+          style={{ height: 50, width: 100 }}
+          onValueChange={(tipo) => this.setState({ tipo: tipo })}>
+          <Picker.Item label="Canino" value="canino" />
+          <Picker.Item label="Felino" value="felino" />
+          <Picker.Item label="Ave" value="ave" />
+          <Picker.Item label="Peixe" value="peixe" />
+          <Picker.Item label="Outro" value="outro" />
+        </Picker>
+        <Text>Sexo</Text>
+        <Picker
+          selectedValue={this.state.sexo}
+          style={{ height: 50, width: 100 }}
+          onValueChange={(sexo) => this.setState({ sexo: sexo })}>
+          <Picker.Item label="Macho" value="macho" />
+          <Picker.Item label="Fêmea" value="femea" />
+          <Picker.Item label="Sem Certeza" value="sem_certeza" />
+        </Picker>
+        <Text>Tamanho</Text>
+        <Picker
+          selectedValue={this.state.tamanho}
+          style={{ height: 50, width: 100 }}
+          onValueChange={(tamanho) => this.setState({ tamanho: tamanho })}>
+          <Picker.Item label="Pequeno" value="pequeno" />
+          <Picker.Item label="Médio" value="medio" />
+          <Picker.Item label="Grande" value="grande" />
+        </Picker>
 
+        <TouchableOpacity onPress={() => this.addAnimal()}>
+          <Text style={styles.button}>Salvar Animal</Text>
+        </TouchableOpacity>
       </ScrollView>
     );
   }

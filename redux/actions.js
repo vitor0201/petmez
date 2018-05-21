@@ -154,6 +154,9 @@ export function updateAbout(value) {
 }
 export function addAnimal(value, array) {
   return function (dispatch) {
+    console.log(value);
+    console.log(array);
+
     let newId = firebase.database().ref().child('animals').push().key;
     let newAnimal = {
       nome: value,
