@@ -1,6 +1,7 @@
 import React from 'react';
 import styles from '../styles'
 import { connect } from 'react-redux';
+import ValidationComponent from 'react-native-form-validator';
 import { Ionicons } from '@expo/vector-icons';
 import { uploadImages, deleteImage, updateAbout, addAnimal } from '../redux/actions'
 import * as firebase from 'firebase';
@@ -15,14 +16,13 @@ import {
 
 } from 'react-native';
 
-class Animal extends React.Component {
+class Animal extends ValidationComponent {
 
   state = {
     nome: '',
-    tipo: '',
-    sexo: '',
-    tamanho: '',
-    user: ''
+    tipo: 'Canino',
+    sexo: 'Macho',
+    tamanho: 'Pequeno'
   }
 
   deleteImage() {
@@ -36,7 +36,12 @@ class Animal extends React.Component {
     console.log("LU");
     console.log(this.state);
     console.log("/LU");
-
+    this.validate({
+      nome: { minlength: 3, maxlength: 30, required: true },
+      tipo: { required: true },
+      sexo: { required: true },
+      tamanho: { required: true },
+    });
     this.props.dispatch(addAnimal(this.state.nome, this.props.user.animals));
   }
   render() {
@@ -47,11 +52,13 @@ class Animal extends React.Component {
 
         <Text>Nome</Text>
         <TextInput
+          deviceLocale="fr"
           style={styles.textInput}
           multiline={true}
           numberOfLines={5}
           onChangeText={(nome) => this.setState({ nome: nome })}
           value={this.state.nome}
+          deviceLocale="fr" 
         />
         <Text>Tipo</Text>
         <Picker
@@ -82,6 +89,10 @@ class Animal extends React.Component {
           <Picker.Item label="Médio" value="medio" />
           <Picker.Item label="Grande" value="grande" />
         </Picker>
+
+        <Text>
+          {this.getErrorMessages()}
+        </Text>
 
         <TouchableOpacity onPress={() => this.addAnimal()}>
           <Text style={styles.button}>Salvar Animal</Text>
