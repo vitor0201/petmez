@@ -1,18 +1,26 @@
 import React from 'react';
 import { StyleSheet } from 'react-native';
+import { Constants } from 'expo';
 var Dimensions = require('Dimensions');
 var deviceWidth = Dimensions.get('window').width;
 var deviceHeight = Dimensions.get('window').height;
 
-var styles = StyleSheet.create({
-  container: {
-    flex: 1,
+const styles = StyleSheet.create({
+  statusBar: {
+    backgroundColor: "#bbb",
+    height: Constants.statusBarHeight,
   },
-  color: {
-  	color: '#df4723'
+  container: {
+    flex: 1
+  },
+  isRed: {
+    color: '#df4723'
+  },
+  backgroundWhite: {
+    backgroundColor: '#fff',
   },
   logo: {
-    width: 100, 
+    width: 100,
     height: 55,
     marginTop: 70
   },
@@ -21,45 +29,43 @@ var styles = StyleSheet.create({
   },
   center: {
     alignItems: 'center',
-    justifyContent: 'center',
-    textAlign: 'center'
+    justifyContent: 'center'
   },
   img: {
-  	width: 80,
-  	height: 80,
-  	borderRadius: 40,
-  	margin: 10,
-  	backgroundColor: '#fff',
+    width: 80,
+    height: 80,
+    borderRadius: 40,
+    margin: 10
   },
   imgRow: {
-		flexWrap: 'wrap',
-		flexDirection: 'row',
-		padding: 15,
+    flexWrap: 'wrap',
+    flexDirection: 'row',
+    padding: 15,
   },
-  textInput: {
+  inputStyle: {
     width: deviceWidth,
     padding: 15,
     backgroundColor: '#fff',
-    height: 100
+    height: 60
   },
   bold: {
     fontSize: 18,
     fontWeight: 'bold',
   },
   button: {
-	  borderRadius: 15,
-	  borderWidth: 1,
-	  borderColor: '#91dc5a',
-	  textAlign: 'center',
-	  color: '#91dc5a',
-	  padding: 15,
-	  margin: 15,
-	  fontSize: 18,
-	  fontWeight: 'bold',
+    borderRadius: 15,
+    borderWidth: 1,
+    borderColor: '#91dc5a',
+    textAlign: 'center',
+    color: '#91dc5a',
+    padding: 15,
+    margin: 15,
+    fontSize: 18,
+    fontWeight: 'bold',
   },
   card: {
-    width: deviceWidth*.9,
-    height: deviceHeight*.75,
+    width: deviceWidth * .9,
+    height: deviceHeight * .75,
     borderRadius: 50,
   },
   cardDescription: {
@@ -73,8 +79,8 @@ var styles = StyleSheet.create({
     padding: 10,
   },
   border: {
-    borderTopColor: '#bbb', 
-    borderTopWidth: 0.5, 
+    borderTopColor: '#bbb',
+    borderTopWidth: 0.5,
   },
 })
 

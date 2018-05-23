@@ -33,9 +33,6 @@ class Animal extends ValidationComponent {
     this.props.dispatch(uploadImages(this.props.user.images))
   }
   addAnimal() {
-    console.log("LU");
-    console.log(this.state);
-    console.log("/LU");
     this.validate({
       nome: { minlength: 3, maxlength: 30, required: true },
       tipo: { required: true },
@@ -48,22 +45,19 @@ class Animal extends ValidationComponent {
     this.props.user;
 
     return (
-      <ScrollView>
-
+      <ScrollView style={styles.container}>
         <Text>Nome</Text>
         <TextInput
-          deviceLocale="fr"
-          style={styles.textInput}
+          style={styles.inputStyle}
           multiline={true}
           numberOfLines={5}
           onChangeText={(nome) => this.setState({ nome: nome })}
           value={this.state.nome}
-          deviceLocale="fr" 
         />
         <Text>Tipo</Text>
         <Picker
+          style={styles.inputStyle}
           selectedValue={this.state.tipo}
-          style={{ height: 50, width: 100 }}
           onValueChange={(tipo) => this.setState({ tipo: tipo })}>
           <Picker.Item label="Canino" value="canino" />
           <Picker.Item label="Felino" value="felino" />
@@ -73,8 +67,8 @@ class Animal extends ValidationComponent {
         </Picker>
         <Text>Sexo</Text>
         <Picker
+          style={styles.inputStyle}
           selectedValue={this.state.sexo}
-          style={{ height: 50, width: 100 }}
           onValueChange={(sexo) => this.setState({ sexo: sexo })}>
           <Picker.Item label="Macho" value="macho" />
           <Picker.Item label="Fêmea" value="femea" />
@@ -82,15 +76,15 @@ class Animal extends ValidationComponent {
         </Picker>
         <Text>Tamanho</Text>
         <Picker
+          style={styles.inputStyle}
           selectedValue={this.state.tamanho}
-          style={{ height: 50, width: 100 }}
           onValueChange={(tamanho) => this.setState({ tamanho: tamanho })}>
           <Picker.Item label="Pequeno" value="pequeno" />
           <Picker.Item label="Médio" value="medio" />
           <Picker.Item label="Grande" value="grande" />
         </Picker>
 
-        <Text>
+        <Text style={styles.color}>
           {this.getErrorMessages()}
         </Text>
 

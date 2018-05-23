@@ -4,7 +4,6 @@ import * as firebase from 'firebase';
 import { sendNotification } from '../redux/actions'
 import { connect } from 'react-redux';
 import { GiftedChat } from 'react-native-gifted-chat'
-
 class Chat extends React.Component {
   state = {
     messages: [],

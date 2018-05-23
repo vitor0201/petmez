@@ -100,7 +100,6 @@ export function uploadImages(images) {
         var array = images
         this.uploadImageHelper(result.uri, "test-6662")
           .then((e) => {
-            console.log(e);
             Alert.alert("Success");
             array.push(e);
             firebase.database().ref('cards/' + firebase.auth().currentUser.uid + '/images').set(array);
@@ -191,64 +190,3 @@ export function getCards(geocode) {
     });
   }
 }
-    // ImagePicker.launchImageLibraryAsync({ allowsEditing: false }).then(function (result) {
-
-    //   var array = images
-
-
-    //   if (result.uri != undefined) {
-    //     const file = {
-    //       uri: result.uri,
-    //       name: result.uri,
-    //       type: "image/png"
-    //     }
-
-    //     const options = {
-    //       keyPrefix: "uploads/",
-    //       bucket: "petmez",
-    //       region: "us-east-1",
-    //       accessKey: aws.accessKey,
-    //       secretKey: aws.secretKey,
-    //       successActionStatus: 201
-    //     }
-    //     // console.log("array");
-    //     // console.log(array);
-    //     // console.log("result");
-    //     // console.log(result);
-    //     // console.log("file");
-    //     // console.log(file);
-
-    //     // if (!result.cancelled) {
-    //     //   uploadUrl = await uploadImageAsync(result.uri);
-    //     //   // this.setState({ image: uploadUrl });
-    //     // }
-    //     // // var uri = ""+ result.uri; 
-    //     // // blob = image_namek
-    //     // // const response = await fetch(uri);
-    //     // // const blob = await response.blob();
-
-    //     // var ref = firebase.storage().ref().child("images/" + "teste");
-    //     // ref.put(file);
-    //     dispatch({ type: 'UPLOAD_IMAGES', payload: array });
-    //     // RNS3.put(file, options).then(function (response) {
-    //     //   console.log(response.status);
-    //     //   if (response.status === 201) {
-    //     //     array.push(response.body.postResponse.location)
-    //     //     firebase.database().ref('cards/' + firebase.auth().currentUser.uid + '/images').set(array);
-    //     //     dispatch({ type: 'UPLOAD_IMAGES', payload: array });
-    //     //   }
-    //     //   if (response.status === 400) {
-    //     //     alert('Erro');
-    //     //   }
-    //     // })
-    //   }
-
-    // })
-
-// uploadImage = async (uri, imageName) => {
-//   const response = await fetch(uri);
-//   const blob = await response.blob();
-
-//   var ref = firebase.storage().ref().child("images/" + imageName);
-//   return ref.put(blob);
-// }
