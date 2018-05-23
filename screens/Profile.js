@@ -23,21 +23,7 @@ class Profile extends React.Component {
   addImage() {
     this.props.dispatch(uploadImages(this.props.user.images))
   }
-  addAnimal() {
-    if (this.props.user.animals) {
-      {
-        this.props.user.animals.map((animal, key) => {
-          return (
-            <TouchableOpacity key={{ key }} onPress={this.deleteImage.bind({ self: this, key: key })} >
-              <Image style={styles.img} source={{ uri: animal.image }} />
-            </TouchableOpacity>
-          );
-        })
-      }
-    }
-  }
   render() {
-    let bacon = 3;
     return (
       <View>
         <View style={styles.statusBar} />
@@ -48,7 +34,15 @@ class Profile extends React.Component {
               <Text style={[styles.center, styles.bold]} >{this.props.user.name}</Text>
             </View>
             <View style={[styles.imgRow, styles.center]}>
-              {this.addAnimal}
+              {
+                this.props.user.animals.map((animal, key) => {
+                  return (
+                    <TouchableOpacity key={{ key }} onPress={this.deleteImage.bind({ self: this, key: key })} >
+                      <Image style={styles.img} source={{ uri: animal.image }} />
+                    </TouchableOpacity>
+                  );
+                })
+              }
               <TouchableOpacity style={[styles.img, styles.center, styles.backgroundWhite]} onPress={() => this.props.navigation.navigate("Animal")}>
                 <Ionicons name="ios-add" size={75} style={styles.isRed} />
               </TouchableOpacity>

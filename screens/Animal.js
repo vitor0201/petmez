@@ -37,7 +37,7 @@ class Animal extends ValidationComponent {
       nome: { minlength: 3, maxlength: 30, required: true },
       tipo: { required: true },
       sexo: { required: true },
-      tamanho: { required: true },
+      tamanho: { required: true }, 
     });
     this.props.dispatch(addAnimal(this.state.nome, this.props.user.animals));
   }
