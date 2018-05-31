@@ -23,6 +23,7 @@ class Profile extends React.Component {
   addImage() {
     this.props.dispatch(uploadImages(this.props.user.images))
   }
+  
   render() {
     return (
       <View>

@@ -5,6 +5,8 @@ import ValidationComponent from 'react-native-form-validator';
 import { Ionicons } from '@expo/vector-icons';
 import { uploadImages, deleteImage, updateAbout, addAnimal } from '../redux/actions'
 import * as firebase from 'firebase';
+import { ImagePicker } from 'expo';
+
 import {
   Text,
   Picker,
@@ -22,30 +24,77 @@ class Animal extends ValidationComponent {
     nome: '',
     tipo: 'Canino',
     sexo: 'Macho',
-    tamanho: 'Pequeno'
+    tamanho: 'Pequeno',
+    imgUri: [],
   }
+
+  _pickImage = async () => {
+    let result = await ImagePicker.launchImageLibraryAsync({
+      allowsEditing: true,
+      aspect: [4, 3],
+    });
+
+    console.log(result);
+
+    if (!result.cancelled) {
+      let arrayImg = this.state.imgUri;
+      arrayImg.push(resulti.uri);
+      this.setState({ imgUri: arrayImg });
+    }
+  };
+
+
 
   deleteImage() {
     this.self.props.dispatch(deleteImage(this.self.props.user.images, this.key))
   }
 
   addImage() {
-    this.props.dispatch(uploadImages(this.props.user.images))
+    this.props.dispatch(uploadImages(this.props.user.animal))
   }
   addAnimal() {
     this.validate({
       nome: { minlength: 3, maxlength: 30, required: true },
       tipo: { required: true },
       sexo: { required: true },
-      tamanho: { required: true }, 
+      tamanho: { required: true },
     });
-    this.props.dispatch(addAnimal(this.state.nome, this.props.user.animals));
+    console.log(this.props.user.animals);
+    console.log(this.state);
+    // this.props.dispatch(addAnimal(this.state.nome, this.props.user.animals));
   }
   render() {
-    this.props.user;
+    // console.log(this.props.user.animals);
 
+    console.log("image")
     return (
       <ScrollView style={styles.container}>
+        {this.state.imgUri ?
+          (this.state.imgUri.map((animal, key) => {
+            return (
+              <TouchableOpacity key={{ key }} onPress={this.deleteImage.bind({ self: this, key: key })} >
+                <Image style={styles.img} source={{ uri: animal.image }} />
+              </TouchableOpacity>
+            );
+          })) : null}
+
+        <TouchableOpacity
+          style={styles.button}
+          onPress={this._pickImage} >
+          <Text style={styles.buttonText}>Choose</Text>
+        </TouchableOpacity>
+        <View style={[styles.imgRow, styles.center]}>
+          {this.props.user.animals.map((animal, key) => {
+            return (
+              <TouchableOpacity key={{ key }} onPress={this.deleteImage.bind({ self: this, key: key })} >
+                <Image style={styles.img} source={{ uri: animal.image }} />
+              </TouchableOpacity>
+            );
+          })}
+          <TouchableOpacity style={[styles.img, styles.center]} onPress={this.addImage.bind(this)}>
+            <Ionicons name="ios-add" size={75} style={styles.color} />
+          </TouchableOpacity>
+        </View>
         <Text>Nome</Text>
         <TextInput
           style={styles.inputStyle}

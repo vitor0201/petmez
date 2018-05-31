@@ -1,6 +1,5 @@
 import * as firebase from 'firebase';
 import { Alert } from 'react-native';
-import aws from '../config/aws';
 import { ImagePicker, Location, Permissions, Notifications } from 'expo';
 import { RNS3 } from 'react-native-aws3';
 import Geohash from 'latlon-geohash';
@@ -153,7 +152,8 @@ export function updateAbout(value) {
 }
 export function addAnimal(value, array) {
   return function (dispatch) {
-    console.log(value);
+    console.log("LUU")
+    // console.log(value);
     console.log(array);
 
     let newId = firebase.database().ref().child('animals').push().key;
@@ -166,7 +166,7 @@ export function addAnimal(value, array) {
       array = [];
     }
     console.log(array);
-    array.push(newAnimal)
+    array.push(newAnimal);
     dispatch({ type: 'ANIMAL_ADD', payload: array });
     firebase.database().ref('cards/' + firebase.auth().currentUser.uid + '/animals').set(array);
   }
