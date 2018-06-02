@@ -25,7 +25,7 @@ class Animal extends ValidationComponent {
     tipo: 'Canino',
     sexo: 'Macho',
     tamanho: 'Pequeno',
-    imgUri: ['../assets/icon.png', '../assets/icon.png'],
+    imgUri: [],
   }
 
   _pickImage = async () => {
@@ -54,7 +54,22 @@ class Animal extends ValidationComponent {
   }
 
   addImage() {
-    this.props.dispatch(uploadImages(this.props.user.animal))
+    let result = await ImagePicker.launchImageLibraryAsync({
+      allowsEditing: true,
+      aspect: [4, 3],
+    });
+
+    console.log(result);
+    console.log("cu");
+
+    if (!result.cancelled) {
+      // let arrayImg = this.state.imgUri;
+      // arrayImg.push(resulti.uri);
+      this.setState({
+        imgUri: [...this.state.imgUri, result.uri]
+      });
+      // this.setState({ imgUri: arrayImg });
+    }
   }
   addAnimal() {
     this.validate({
@@ -73,13 +88,11 @@ class Animal extends ValidationComponent {
         {
           (this.state.imgUri.map((animal, key) => {
             return (
-              // <Text>{animal}</Text>
-              // <TouchableOpacity key={{ key }} onPress={this.deleteImage.bind({ self: this, key: key })} >
-                <Image style={styles.img} source={require({ uri: animal })} />
-                <Image style={styles.img} source={require({animal} )}/>
-              // </TouchableOpacity>
+              <TouchableOpacity key={{ key }} onPress={this.deleteImage.bind({ self: this, key: key })} >
+                <Image style={styles.img} source={{ uri: animal }} />
+              </TouchableOpacity>
             );
-          })) }
+          }))}
 
         <TouchableOpacity
           style={styles.button}
@@ -95,7 +108,7 @@ class Animal extends ValidationComponent {
               </TouchableOpacity>
             );
           })}
-          <TouchableOpacity style={[styles.img, styles.center]} onPress={this.addImage.bind(this)}>
+          <TouchableOpacity style={[styles.img, styles.center]} onPress={this.addImage}>
             <Ionicons name="ios-add" size={75} style={styles.color} />
           </TouchableOpacity>
         </View>
