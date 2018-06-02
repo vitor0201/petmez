@@ -25,7 +25,7 @@ class Animal extends ValidationComponent {
     tipo: 'Canino',
     sexo: 'Macho',
     tamanho: 'Pequeno',
-    imgUri: [],
+    imgUri: ['../assets/icon.png', '../assets/icon.png'],
   }
 
   _pickImage = async () => {
@@ -35,11 +35,15 @@ class Animal extends ValidationComponent {
     });
 
     console.log(result);
+    console.log("cu");
 
     if (!result.cancelled) {
-      let arrayImg = this.state.imgUri;
-      arrayImg.push(resulti.uri);
-      this.setState({ imgUri: arrayImg });
+      // let arrayImg = this.state.imgUri;
+      // arrayImg.push(resulti.uri);
+      this.setState({
+        imgUri: [...this.state.imgUri, result.uri]
+      });
+      // this.setState({ imgUri: arrayImg });
     }
   };
 
@@ -64,19 +68,18 @@ class Animal extends ValidationComponent {
     // this.props.dispatch(addAnimal(this.state.nome, this.props.user.animals));
   }
   render() {
-    // console.log(this.props.user.animals);
-
-    console.log("image")
     return (
       <ScrollView style={styles.container}>
-        {this.state.imgUri ?
+        {
           (this.state.imgUri.map((animal, key) => {
             return (
-              <TouchableOpacity key={{ key }} onPress={this.deleteImage.bind({ self: this, key: key })} >
-                <Image style={styles.img} source={{ uri: animal.image }} />
-              </TouchableOpacity>
+              // <Text>{animal}</Text>
+              // <TouchableOpacity key={{ key }} onPress={this.deleteImage.bind({ self: this, key: key })} >
+                <Image style={styles.img} source={require({ uri: animal })} />
+                <Image style={styles.img} source={require({animal} )}/>
+              // </TouchableOpacity>
             );
-          })) : null}
+          })) }
 
         <TouchableOpacity
           style={styles.button}
@@ -84,7 +87,8 @@ class Animal extends ValidationComponent {
           <Text style={styles.buttonText}>Choose</Text>
         </TouchableOpacity>
         <View style={[styles.imgRow, styles.center]}>
-          {this.props.user.animals.map((animal, key) => {
+          {this.state.imgUri.map((animal, key) => {
+            console.log(animal);
             return (
               <TouchableOpacity key={{ key }} onPress={this.deleteImage.bind({ self: this, key: key })} >
                 <Image style={styles.img} source={{ uri: animal.image }} />
