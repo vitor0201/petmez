@@ -13,6 +13,9 @@ const styles = StyleSheet.create({
   container: {
     flex: 1
   },
+  body: {
+    flex: 3
+  },
   isRed: {
     color: '#df4723'
   },

@@ -28,49 +28,18 @@ class Animal extends ValidationComponent {
     imgUri: [],
   }
 
-  _pickImage = async () => {
+  addImage = async () => {
     let result = await ImagePicker.launchImageLibraryAsync({
       allowsEditing: true,
       aspect: [4, 3],
     });
-
-    console.log(result);
-    console.log("cu");
-
     if (!result.cancelled) {
-      // let arrayImg = this.state.imgUri;
-      // arrayImg.push(resulti.uri);
       this.setState({
         imgUri: [...this.state.imgUri, result.uri]
       });
-      // this.setState({ imgUri: arrayImg });
     }
   };
 
-
-
-  deleteImage() {
-    this.self.props.dispatch(deleteImage(this.self.props.user.images, this.key))
-  }
-
-  addImage() {
-    let result = await ImagePicker.launchImageLibraryAsync({
-      allowsEditing: true,
-      aspect: [4, 3],
-    });
-
-    console.log(result);
-    console.log("cu");
-
-    if (!result.cancelled) {
-      // let arrayImg = this.state.imgUri;
-      // arrayImg.push(resulti.uri);
-      this.setState({
-        imgUri: [...this.state.imgUri, result.uri]
-      });
-      // this.setState({ imgUri: arrayImg });
-    }
-  }
   addAnimal() {
     this.validate({
       nome: { minlength: 3, maxlength: 30, required: true },
@@ -78,38 +47,25 @@ class Animal extends ValidationComponent {
       sexo: { required: true },
       tamanho: { required: true },
     });
-    console.log(this.props.user.animals);
-    console.log(this.state);
-    // this.props.dispatch(addAnimal(this.state.nome, this.props.user.animals));
+    this.props.dispatch(addAnimal(this.state, this.props.user.animals));
   }
   render() {
     return (
       <ScrollView style={styles.container}>
-        {
-          (this.state.imgUri.map((animal, key) => {
-            return (
-              <TouchableOpacity key={{ key }} onPress={this.deleteImage.bind({ self: this, key: key })} >
-                <Image style={styles.img} source={{ uri: animal }} />
-              </TouchableOpacity>
-            );
-          }))}
-
-        <TouchableOpacity
-          style={styles.button}
-          onPress={this._pickImage} >
-          <Text style={styles.buttonText}>Choose</Text>
-        </TouchableOpacity>
         <View style={[styles.imgRow, styles.center]}>
-          {this.state.imgUri.map((animal, key) => {
-            console.log(animal);
-            return (
-              <TouchableOpacity key={{ key }} onPress={this.deleteImage.bind({ self: this, key: key })} >
-                <Image style={styles.img} source={{ uri: animal.image }} />
-              </TouchableOpacity>
-            );
-          })}
-          <TouchableOpacity style={[styles.img, styles.center]} onPress={this.addImage}>
-            <Ionicons name="ios-add" size={75} style={styles.color} />
+
+          {
+            (this.state.imgUri.map((animal, key) => {
+              return (
+                <TouchableOpacity key={{ key }} onPress={() => this.setState({
+                  imgUri: [...this.state.imgUri.slice(0, key), ...this.state.imgUri.slice(key + 1)]
+                })} >
+                  <Image style={styles.img} source={{ uri: animal }} />
+                </TouchableOpacity>
+              );
+            }))}
+          <TouchableOpacity style={[styles.img, styles.center, styles.backgroundWhite]} onPress={this.addImage}>
+            <Ionicons name="ios-add" size={75} style={styles.isRed} />
           </TouchableOpacity>
         </View>
         <Text>Nome</Text>
@@ -150,7 +106,7 @@ class Animal extends ValidationComponent {
           <Picker.Item label="Grande" value="grande" />
         </Picker>
 
-        <Text style={styles.color}>
+        <Text style={styles.isRed}>
           {this.getErrorMessages()}
         </Text>
 

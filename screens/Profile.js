@@ -23,41 +23,41 @@ class Profile extends React.Component {
   addImage() {
     this.props.dispatch(uploadImages(this.props.user.images))
   }
-  
+
   render() {
     return (
-      <View>
+      <View style={styles.container}>
         <View style={styles.statusBar} />
-        <ScrollView>
-          <View style={[styles.container, styles.center, styles.border]}>
-            <View style={styles.container}>
-              <Image style={styles.img} source={{ uri: this.props.user.photoUrl }} />
-              <Text style={[styles.center, styles.bold]} >{this.props.user.name}</Text>
-            </View>
-            <View style={[styles.imgRow, styles.center]}>
-              {
-                this.props.user.animals.map((animal, key) => {
-                  return (
-                    <TouchableOpacity key={{ key }} onPress={this.deleteImage.bind({ self: this, key: key })} >
-                      <Image style={styles.img} source={{ uri: animal.image }} />
-                    </TouchableOpacity>
-                  );
-                })
-              }
-              <TouchableOpacity style={[styles.img, styles.center, styles.backgroundWhite]} onPress={() => this.props.navigation.navigate("Animal")}>
-                <Ionicons name="ios-add" size={75} style={styles.isRed} />
-              </TouchableOpacity>
-            </View>
-            <Text style={styles.bold}>Telefone</Text>
-            <TextInput
-              style={styles.inputStyle}
-              onChangeText={(text) => this.props.dispatch(updateAbout(text))}
-              value={this.props.user.aboutMe} />
+        <View style={[styles.container, styles.center]}>
+          <Image style={styles.img} source={{ uri: this.props.user.photoUrl }} />
+          <Text style={[styles.center, styles.bold]} >{this.props.user.name}</Text>
+        </View>
+        <View style={[styles.body, styles.center]}>
+          <View style={[styles.imgRow, styles.center]}>
+            {
+              this.props.user.animals.map((animal, key) => {
+                return (
+                  <TouchableOpacity key={{ key }} onPress={this.deleteImage.bind({ self: this, key: key })} >
+                    <Image style={styles.img} source={{ uri: animal.image }} />
+                  </TouchableOpacity>
+                );
+              })
+            }
+            <TouchableOpacity style={[styles.img, styles.center, styles.backgroundWhite]} onPress={() => this.props.navigation.navigate("Animal")}>
+              <Ionicons name="ios-add" size={75} style={styles.isRed} />
+            </TouchableOpacity>
           </View>
+          <Text style={styles.bold}>Telefone</Text>
+          <TextInput
+            style={styles.inputStyle}
+            onChangeText={(text) => this.props.dispatch(updateAbout(text))}
+            value={this.props.user.aboutMe} />
+        </View>
+        <View style={styles.container}>
           <TouchableOpacity onPress={() => this.props.dispatch(logout())}>
             <Text style={styles.button}>Logout</Text>
           </TouchableOpacity>
-        </ScrollView>
+        </View>
       </View>
     )
   }

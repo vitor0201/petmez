@@ -54,7 +54,6 @@ export function sendNotification(id, name, text) {
   return function (dispatch) {
     firebase.database().ref('cards/' + id).once('value', (snap) => {
       if (snap.val().token != null) {
-
         return fetch('https://exp.host/--/api/v2/push/send', {
           method: 'POST',
           headers: {
@@ -150,11 +149,12 @@ export function updateAbout(value) {
   }
 
 }
-export function addAnimal(value, array) {
+export function addAnimal(state, props) {
   return function (dispatch) {
     console.log("LUU")
     // console.log(value);
-    console.log(array);
+    console.log(state);
+    console.log(props);
 
     let newId = firebase.database().ref().child('animals').push().key;
     let newAnimal = {
@@ -167,8 +167,8 @@ export function addAnimal(value, array) {
     }
     console.log(array);
     array.push(newAnimal);
-    dispatch({ type: 'ANIMAL_ADD', payload: array });
-    firebase.database().ref('cards/' + firebase.auth().currentUser.uid + '/animals').set(array);
+    dispatch({ type: 'ANIMAL_ADD', payload: state });
+    // firebase.database().ref('cards/' + firebase.auth().currentUser.uid + '/animals').set(array);
   }
 }
 export function logout() {
