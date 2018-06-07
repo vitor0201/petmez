@@ -14,8 +14,6 @@ import {
 } from 'react-native';
 
 class Profile extends React.Component {
-
-
   deleteImage() {
     this.self.props.dispatch(deleteImage(this.self.props.user.images, this.key))
   }
@@ -25,6 +23,7 @@ class Profile extends React.Component {
   }
 
   render() {
+    console.log(this.props.user)
     return (
       <View style={styles.container}>
         <View style={styles.statusBar} />
@@ -38,7 +37,8 @@ class Profile extends React.Component {
               this.props.user.animals.map((animal, key) => {
                 return (
                   <TouchableOpacity key={{ key }} onPress={this.deleteImage.bind({ self: this, key: key })} >
-                    <Image style={styles.img} source={{ uri: animal.image }} />
+                    {/* <Image style={styles.img} source={{ uri: animal.image[0] }} /> */}
+                    <Text>{animal.nome}</Text>
                   </TouchableOpacity>
                 );
               })

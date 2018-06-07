@@ -151,24 +151,48 @@ export function updateAbout(value) {
 }
 export function addAnimal(state, props) {
   return function (dispatch) {
-    console.log("LUU")
-    // console.log(value);
-    console.log(state);
-    console.log(props);
+    // state.imgUri.forEach((img) => {
+    //   console.log(img);
+    //   console.log(this);
+    //   console.log(state);
+    //   }
+    // });
+    var array = [];
+    state.imgUri.map((img) => {
+      // console.log("MAPPPPP");
+      // console.log(img);
+      // console.log(state);
+      this.uploadImageHelper(img, Math.random() * Date.now() + '')
+        .then((e) => {
+          Alert.alert("Success");
+          array.push(e);
+          console.log(array);
+          // firebase.database().ref('cards/' + firebase.auth().currentUser.uid + '/images').set(array);
+        })
+        .then(() => {
+          console.log(array);
+          let newId = firebase.database().ref().child('animals').push().key;
+          let newAnimal = {
+            id: newId,
+            nome: state.nome,
+            sexo: state.sexo,
+            tamanho: state.tamanho,
+            imgUri: [...array]
+          };
+          //Caso seja o primeiro animal
+          if (props == null) {
+            props = [];
+          }
+          props.push(newAnimal);
+          console.log(props);
+          dispatch({ type: 'ANIMAL_ADD', payload: props });
+          firebase.database().ref('cards/' + firebase.auth().currentUser.uid + '/animals').set(props);
+        })
+        .catch((error) => {
+          Alert.alert(error);
+        });
+    })
 
-    let newId = firebase.database().ref().child('animals').push().key;
-    let newAnimal = {
-      nome: value,
-      id: newId,
-    };
-    //Caso seja o primeiro animal
-    if (array == null) {
-      array = [];
-    }
-    console.log(array);
-    array.push(newAnimal);
-    dispatch({ type: 'ANIMAL_ADD', payload: state });
-    // firebase.database().ref('cards/' + firebase.auth().currentUser.uid + '/animals').set(array);
   }
 }
 export function logout() {

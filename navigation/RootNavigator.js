@@ -3,6 +3,7 @@ import { StackNavigator } from 'react-navigation';
 import TabNavigator from './TabNavigator.js';
 import Chat from '../screens/Chat.js';
 import Animal from '../screens/Animal';
+import Profile from '../screens/Profile';
 
 const RootStackNavigator = StackNavigator(
   {
@@ -14,6 +15,9 @@ const RootStackNavigator = StackNavigator(
     },
     Animal: {
       screen: Animal,
+    },
+    Profile: {
+      screen: Profile,
     },
   }
 );

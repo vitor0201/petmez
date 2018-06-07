@@ -46,8 +46,14 @@ class Animal extends ValidationComponent {
       tipo: { required: true },
       sexo: { required: true },
       tamanho: { required: true },
+      imgUri: { required: true },
+
     });
-    this.props.dispatch(addAnimal(this.state, this.props.user.animals));
+    if(!this.getErrorMessages()){
+      this.props.dispatch(addAnimal(this.state, this.props.user.animals));
+      // TODO:  descobrir como enviar decentemente 
+      this.props.navigation.popToTop();
+    }
   }
   render() {
     return (
