@@ -50,9 +50,9 @@ class Animal extends ValidationComponent {
 
     });
     if(!this.getErrorMessages()){
-      this.props.dispatch(addAnimal(this.state, this.props.user.animals));
+      this.props.dispatch(addAnimal(this.state, this.props.user));
       // TODO:  descobrir como enviar decentemente 
-      this.props.navigation.popToTop();
+      // this.props.navigation.popToTop();
     }
   }
   render() {
