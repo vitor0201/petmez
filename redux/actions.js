@@ -134,47 +134,16 @@ export function uploadImages(images) {
   };
 }
 
-function getData(x) {
-  return new Promise((resolve, reject) => {
-    setTimeout(() => {
-      resolve(x);
-    }, 500);
-  });
-}
-
 uploadImageHelper = async (uri, imageName) => {
-  var array = [];
-  console.log(result);
-  // var ref = firebase.storage().ref();
-  console.log("fdsfds");
-  // await Promise.all(
-  //   uri.map(async blob => {
-  //     console.log(blob);
-  //     let result = await getData(blob);
-  //     console.log(result);
-  //     // var ref = firebase.storage().ref().child("images/" + imageName);
-  //     // const snapshot = await ref.put(blob);
-  //     // console.log(snapshot);
-  //     // const snapshot = await ref.child("images/" + imageName).put(result);
-  //     // console.log(snapshot.downloadURL);
-  //     // array.push(snapshot.downloadURL);
-  //   })
-  // );
+  const response = await fetch(uri);
+  const blob = await response.blob();
 
-  // uri.map(blob => {
-  //   console.log("AQUI");
-  //   console.log(blob);
-  //   var ref = firebase
-  //     .storage()
-  //     .ref()
-  //     .child("images/" + this.imageName);
-  //   const snapshot = ref.put(blob);
-  //   console.log(snapshot);
-  //   this.array.push(snapshot);
-  // });
-  // console.log(array);
-  // return array;
-  // return snapshot.downloadURL;
+  var ref = firebase
+    .storage()
+    .ref()
+    .child("images/" + imageName);
+  const snapshot = await ref.put(blob);
+  return snapshot.downloadURL;
 };
 export function deleteImage(images, key) {
   return function(dispatch) {
@@ -213,57 +182,43 @@ export function updateAbout(value) {
   };
 }
 export function addAnimal(state, props) {
-  return function add(dispatch) {
-    // state.imgUri.forEach((img) => {
-    //   console.log(img);
-    //   console.log(this);
-    //   console.log(state);
-    //   }
-    // });
+  return function(dispatch) {
+    var helper = 0;
+    console.log(helper);
     var array = [];
-    // state.imgUri.map((img) => {
-    // console.log("MAPPPPP");
-    // console.log(img);
-    // console.log(state);
-    this.uploadImageHelper(
-      state.imgUri,
-      Math.random() * Date.now() + "" + props.id
-    )
-      .then(e => {
-        Alert.alert("Success");
-        // array.push(e);
-        // firebase.database().ref('cards/' + firebase.auth().currentUser.uid + '/images').set(array);
-      })
-      .then(() => {
-        console.log(array);
-        // let newId = firebase
-        //   .database()
-        //   .ref()
-        //   .child("animals")
-        //   .push().key;
-        // let newAnimal = {
-        //   id: newId,
-        //   nome: state.nome,
-        //   sexo: state.sexo,
-        //   tamanho: state.tamanho,
-        //   imgUri: [...array]
-        // };
-        // //Caso seja o primeiro animal
-        // if (props == null) {
-        //   props = [];
-        // }
-        // props.push(newAnimal);
-        // console.log(props);
-        // dispatch({ type: "ANIMAL_ADD", payload: props });
-        // firebase
-        //   .database()
-        //   .ref("cards/" + firebase.auth().currentUser.uid + "/animals")
-        //   .set(props);
-      })
-      .catch(error => {
-        Alert.alert(error);
-      });
-    // })
+    var promisses = state.imgUri.map(e => {
+      var nameImg = Math.random() * Date.now() + "" + props.id + helper;
+      var imgReturn = this.uploadImageHelper(e, nameImg);
+      helper += 1;
+      return imgReturn;
+    });
+    Promise.all(promisses).then(e => {
+      console.log(state)
+      console.log(e)
+      let newId = firebase
+        .database()
+        .ref()
+        .child("animals")
+        .push().key;
+      let newAnimal = {
+        id: newId,
+        nome: state.nome,
+        sexo: state.sexo,
+        tamanho: state.tamanho,
+        imgUri: e
+      };
+      console.log(newAnimal)
+      //Caso seja o primeiro animal
+      // if (array) {
+      //   var array = [];
+      // }
+      console.log(array);
+      array.push(newAnimal);
+      console.log(array);
+      console.log(newAnimal);
+      dispatch({ type: "ANIMAL_ADD", payload: array });
+      firebase.database().ref('cards/' + firebase.auth().currentUser.uid + '/animals').set(array);
+    });
   };
 }
 export function logout() {
