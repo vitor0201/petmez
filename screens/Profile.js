@@ -2,33 +2,48 @@ import React from "react";
 import { connect } from "react-redux";
 import { Ionicons } from "@expo/vector-icons";
 import styles from "../styles";
-import {
-  uploadImages,
-  deleteImage,
-  updateAbout,
-  logout
-} from "../redux/actions";
+import { deleteAnimal, updateAbout, logout } from "../redux/actions";
 
 import {
   Text,
   View,
   Image,
+  Alert,
   TouchableOpacity,
   TextInput,
   ScrollView
 } from "react-native";
 
 class Profile extends React.Component {
-  deleteImage() {
-    this.self.props.dispatch(
-      deleteImage(this.self.props.user.images, this.key)
+  // deleteImage() {
+  //   this.self.props.dispatch(
+  //     deleteImage(this.self.props.user.images, this.key)
+  //   );
+  // }
+
+  // addImage() {
+  //   this.props.dispatch(uploadImages(this.props.user.images));
+  // }
+
+  alertMenu() {
+    console.log(this.self.props.user.animals);
+    console.log(this.key);
+    Alert.alert(
+      "Opções",
+      "",
+      [
+        {
+          text: "Modificar",
+          onPress: () => console.log("Ask me later pressed")
+        },
+        {
+          text: "Apagar",
+          onPress: deleteAnimal(this.key, this.self.props.user.animals)
+        }
+      ],
+      { cancelable: true }
     );
   }
-
-  addImage() {
-    this.props.dispatch(uploadImages(this.props.user.images));
-  }
-
   render() {
     return (
       <View style={styles.container}>
@@ -44,15 +59,19 @@ class Profile extends React.Component {
         </View>
         <View style={[styles.body, styles.center]}>
           <View style={[styles.imgRow, styles.center]}>
-            {
-              // this.props.user.animals.map((animal, key) => {
-              //   return (
-              //     <TouchableOpacity key={{ key }} onPress={this.deleteImage.bind({ self: this, key: key })} >
-              //       <Image style={styles.img} source={{ uri: animal.image }} />
-              //     </TouchableOpacity>
-              //   );
-              // })
-            }
+            {this.props.user.animals.map((animal, key) => {
+              return (
+                <TouchableOpacity
+                  key={{ key }}
+                  onPress={this.alertMenu.bind({ self: this, key: key })}
+                >
+                  <Image
+                    style={styles.img}
+                    source={{ uri: animal.imgUri[0] }}
+                  />
+                </TouchableOpacity>
+              );
+            })}
             <TouchableOpacity
               style={[styles.img, styles.center, styles.backgroundWhite]}
               onPress={() => this.props.navigation.navigate("Animal")}

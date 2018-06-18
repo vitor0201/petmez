@@ -193,8 +193,8 @@ export function addAnimal(state, props) {
       return imgReturn;
     });
     Promise.all(promisses).then(e => {
-      console.log(state)
-      console.log(e)
+      console.log(state);
+      console.log(e);
       let newId = firebase
         .database()
         .ref()
@@ -207,18 +207,43 @@ export function addAnimal(state, props) {
         tamanho: state.tamanho,
         imgUri: e
       };
-      console.log(newAnimal)
-      //Caso seja o primeiro animal
-      // if (array) {
-      //   var array = [];
-      // }
-      console.log(array);
       array.push(newAnimal);
-      console.log(array);
-      console.log(newAnimal);
       dispatch({ type: "ANIMAL_ADD", payload: array });
-      firebase.database().ref('cards/' + firebase.auth().currentUser.uid + '/animals').set(array);
+      firebase
+        .database()
+        .ref("cards/" + firebase.auth().currentUser.uid + "/animals")
+        .set(array);
     });
+  };
+}
+
+export function deleteAnimal(element, state) {
+  return function(dispatch) {
+    console.log(element);
+    console.log(state);
+
+    Alert.alert(
+      "Você tem certeza que deseja apagar ?",
+      "",
+      [
+        {
+          text: "Sim",
+          onPress: () => {
+            var array = state;
+            if (element > -1) {
+              state.splice(element, 1);
+              firebase
+                .database()
+                .ref("cards/" + firebase.auth().currentUser.uid + "/animals")
+                .set(array);
+              dispatch({ type: "ANIMAL_ADD", payload: array });
+            }
+          }
+        },
+        { text: "Não", onPress: () => console.log("Cancel Pressed") }
+      ],
+      { cancelable: true }
+    );
   };
 }
 export function logout() {
