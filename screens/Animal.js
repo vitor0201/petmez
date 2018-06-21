@@ -48,6 +48,8 @@ class Animal extends ValidationComponent {
       sexo: { required: true },
       tamanho: { required: true }
     });
+
+    // !this.getErrorMessages() && this.dispatcher(this.state, this.props.user).then(_ => this.props.navigation.popToTop())
     if (this.getErrorMessages() == "") {
       this.dispatcher(this.state, this.props.user).then(() => this.props.navigation.popToTop());
     }
