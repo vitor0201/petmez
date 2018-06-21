@@ -1,11 +1,10 @@
 import * as firebase from "firebase";
 import { Alert } from "react-native";
 import { ImagePicker, Location, Permissions, Notifications } from "expo";
-import { RNS3 } from "react-native-aws3";
 import Geohash from "latlon-geohash";
 
 export function login(user) {
-  return function(dispatch) {
+  return function (dispatch) {
     let params = {
       id: user.uid,
       photoUrl: user.photoURL,
@@ -28,7 +27,7 @@ export function login(user) {
       .database()
       .ref("cards/")
       .child(user.uid)
-      .once("value", function(snapshot) {
+      .once("value", function (snapshot) {
         if (snapshot.val() !== null) {
           dispatch({ type: "LOGIN", user: snapshot.val(), loggedIn: true });
           dispatch(allowNotification());
@@ -45,10 +44,10 @@ export function login(user) {
 }
 
 export function allowNotification() {
-  return function(dispatch) {
-    Permissions.getAsync(Permissions.NOTIFICATIONS).then(function(result) {
+  return function (dispatch) {
+    Permissions.getAsync(Permissions.NOTIFICATIONS).then(function (result) {
       if (result.status === "granted") {
-        Notifications.getExpoPushTokenAsync().then(function(token) {
+        Notifications.getExpoPushTokenAsync().then(function (token) {
           firebase
             .database()
             .ref("cards/" + firebase.auth().currentUser.uid)
@@ -61,7 +60,7 @@ export function allowNotification() {
 }
 
 export function sendNotification(id, name, text) {
-  return function(dispatch) {
+  return function (dispatch) {
     firebase
       .database()
       .ref("cards/" + id)
@@ -85,10 +84,10 @@ export function sendNotification(id, name, text) {
   };
 }
 export function getLocation() {
-  return function(dispatch) {
-    Permissions.askAsync(Permissions.LOCATION).then(function(result) {
+  return function (dispatch) {
+    Permissions.askAsync(Permissions.LOCATION).then(function (result) {
       if (result) {
-        Location.getCurrentPositionAsync({}).then(function(location) {
+        Location.getCurrentPositionAsync({}).then(function (location) {
           var geocode = Geohash.encode(
             location.coords.latitude,
             location.coords.longitude,
@@ -110,8 +109,8 @@ export function getLocation() {
  * TODO: Transformar uploadImages(images) em função pura
  */
 export function uploadImages(images) {
-  return function(dispatch) {
-    ImagePicker.launchImageLibraryAsync({ allowsEditing: false }).then(function(
+  return function (dispatch) {
+    ImagePicker.launchImageLibraryAsync({ allowsEditing: false }).then(function (
       result
     ) {
       if (!result.cancelled) {
@@ -145,8 +144,9 @@ uploadImageHelper = async (uri, imageName) => {
   const snapshot = await ref.put(blob);
   return snapshot.downloadURL;
 };
+
 export function deleteImage(images, key) {
-  return function(dispatch) {
+  return function (dispatch) {
     Alert.alert(
       "Are you sure you want to Delete",
       "",
@@ -171,9 +171,9 @@ export function deleteImage(images, key) {
 }
 
 export function updateAbout(value) {
-  return function(dispatch) {
-    dispatch({ type: "ANIMAL_ADD", payload: value });
-    setTimeout(function() {
+  return function (dispatch) {
+    dispatch({ type: "UPDATE_ABOUT", payload: value });
+    setTimeout(function () {
       firebase
         .database()
         .ref("cards/" + firebase.auth().currentUser.uid)
@@ -181,11 +181,15 @@ export function updateAbout(value) {
     }, 3000);
   };
 }
+
 export function addAnimal(state, props) {
-  return function(dispatch) {
+  return function (dispatch) {
     var helper = 0;
-    console.log(helper);
+    console.log(props);
     var array = [];
+    if (props.animals) {
+      array = props.animals;
+    }
     var promisses = state.imgUri.map(e => {
       var nameImg = Math.random() * Date.now() + "" + props.id + helper;
       var imgReturn = this.uploadImageHelper(e, nameImg);
@@ -213,47 +217,35 @@ export function addAnimal(state, props) {
         .database()
         .ref("cards/" + firebase.auth().currentUser.uid + "/animals")
         .set(array);
+      return;
     });
   };
 }
 
 export function deleteAnimal(element, state) {
-  return function(dispatch) {
+  return function (dispatch) {
     console.log(element);
     console.log(state);
-
-    Alert.alert(
-      "Você tem certeza que deseja apagar ?",
-      "",
-      [
-        {
-          text: "Sim",
-          onPress: () => {
-            var array = state;
-            if (element > -1) {
-              state.splice(element, 1);
-              firebase
-                .database()
-                .ref("cards/" + firebase.auth().currentUser.uid + "/animals")
-                .set(array);
-              dispatch({ type: "ANIMAL_ADD", payload: array });
-            }
-          }
-        },
-        { text: "Não", onPress: () => console.log("Cancel Pressed") }
-      ],
-      { cancelable: true }
-    );
+    var array = state;
+    if (element > -1) {
+      state.splice(element, 1);
+      firebase
+        .database()
+        .ref("cards/" + firebase.auth().currentUser.uid + "/animals")
+        .set(array);
+      dispatch({ type: "ANIMAL_ADD", payload: array });
+    }
   };
 }
+
 export function logout() {
-  return function(dispatch) {
+  return function (dispatch) {
     firebase.auth().signOut();
     dispatch({ type: "LOGOUT", loggedIn: false });
   };
 }
 export function getCards(geocode) {
-  return function(dispatch) {
+  return function (dispatch) {
     firebase
       .database()
       .ref("cards")

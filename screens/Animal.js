@@ -3,15 +3,8 @@ import styles from "../styles";
 import { connect } from "react-redux";
 import ValidationComponent from "react-native-form-validator";
 import { Ionicons } from "@expo/vector-icons";
-import {
-  uploadImages,
-  deleteImage,
-  updateAbout,
-  addAnimal
-} from "../redux/actions";
-import * as firebase from "firebase";
+import { addAnimal } from "../redux/actions";
 import { ImagePicker } from "expo";
-
 import {
   Text,
   Picker,
@@ -30,7 +23,9 @@ class Animal extends ValidationComponent {
     tamanho: "Pequeno",
     imgUri: []
   };
-
+/**
+ * Função que retornar captura as imagens e coloca no state
+ */
   addImage = async () => {
     let result = await ImagePicker.launchImageLibraryAsync({
       allowsEditing: true,
@@ -42,7 +37,10 @@ class Animal extends ValidationComponent {
       });
     }
   };
-
+/**
+ * Função que faz a validação para ver se todos os campo estão cadastrados, caso estejam
+ * manda salvar e retorna a tela inicial;
+ */
   addAnimal() {
     this.validate({
       nome: { minlength: 3, maxlength: 30, required: true },
@@ -50,8 +48,15 @@ class Animal extends ValidationComponent {
       sexo: { required: true },
       tamanho: { required: true }
     });
-    this.props.dispatch(addAnimal(this.state, this.props.user));
+    if (this.getErrorMessages() == "") {
+      this.dispatcher(this.state, this.props.user).then(() => this.props.navigation.popToTop());
+    }
   }
+
+  dispatcher = async (state, user) => {
+    this.props.dispatch(addAnimal(state, user));
+  };
+
   render() {
     return (
       <ScrollView style={styles.container}>
@@ -135,6 +140,5 @@ function mapStateToProps(state) {
   return {
     user: state.user
   };
-}
-
+};
 export default connect(mapStateToProps)(Animal);

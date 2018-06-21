@@ -38,8 +38,26 @@ class Profile extends React.Component {
         },
         {
           text: "Apagar",
-          onPress: deleteAnimal(this.key, this.self.props.user.animals)
+          onPress: this.self.props.dispatch(deleteAnimal(this.key, this.self.props.user.animals)),
         }
+      ],
+      { cancelable: true }
+    );
+  }
+
+  updatePhone() {
+    this.self.props.dispatch(updateAbout(this.text));
+
+  }
+  deleteConfirm() {
+    Alert.alert(
+      "Você tem certeza que deseja apagar ?",
+      "",
+      [
+        {
+          text: "Sim"
+        },
+        { text: "Não", onPress: () => console.log("Cancel Pressed") }
       ],
       { cancelable: true }
     );
@@ -59,19 +77,20 @@ class Profile extends React.Component {
         </View>
         <View style={[styles.body, styles.center]}>
           <View style={[styles.imgRow, styles.center]}>
-            {this.props.user.animals.map((animal, key) => {
-              return (
-                <TouchableOpacity
-                  key={{ key }}
-                  onPress={this.alertMenu.bind({ self: this, key: key })}
-                >
-                  <Image
-                    style={styles.img}
-                    source={{ uri: animal.imgUri[0] }}
-                  />
-                </TouchableOpacity>
-              );
-            })}
+            {this.props.user.animals &&
+              this.props.user.animals.map((animal, key) => {
+                return (
+                  <TouchableOpacity
+                    key={{ key }}
+                    onPress={this.alertMenu.bind({ self: this, key: key })}
+                  >
+                    <Image
+                      style={styles.img}
+                      source={{ uri: animal.imgUri[0] }}
+                    />
+                  </TouchableOpacity>
+                );
+              })}
             <TouchableOpacity
               style={[styles.img, styles.center, styles.backgroundWhite]}
               onPress={() => this.props.navigation.navigate("Animal")}
@@ -82,8 +101,11 @@ class Profile extends React.Component {
           <Text style={styles.bold}>Telefone</Text>
           <TextInput
             style={styles.inputStyle}
-            onChangeText={text => this.props.dispatch(updateAbout(text))}
-            value={this.props.user.aboutMe}
+            keyboardType='numeric'
+            // onChangeText={text => this.props.dispatch(updateAbout(text))}
+            onChangeText={text => this.bind.updatePhone({ self: this, text })}
+            value={this.props.user.aboutMe
+            }
           />
         </View>
         <View style={styles.container}>
