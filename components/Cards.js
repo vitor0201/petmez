@@ -1,8 +1,8 @@
 import React from 'react';
 import styles from '../styles'
 
-import { 
-  Text, 
+import {
+  Text,
   View,
   ImageBackground,
   TouchableOpacity,
@@ -13,9 +13,9 @@ class Cards extends React.Component {
     num: 0
   }
 
-  nextPhoto(){
+  nextPhoto() {
     var num = this.state.num
-    var length = this.props.images.length -1
+    var length = this.props.images.length - 1
     if (num >= length) {
       this.setState({ num: 0 })
     } else {
@@ -25,17 +25,19 @@ class Cards extends React.Component {
   }
 
   render() {
+    console.log("AQUI");
+    console.log(this.props);
     return (
-        <TouchableOpacity onPress={() => this.nextPhoto()}>
-          <ImageBackground style={styles.card} source={{uri: this.props.images[this.state.num]}}>
-            <View style={styles.cardDescription}>
-              <View style={styles.cardInfo}>
-                <Text style={styles.bold}>{this.props.name}</Text>
-                <Text>{this.props.aboutMe}</Text>
-              </View>
+      <TouchableOpacity onPress={() => this.nextPhoto()}>
+        <ImageBackground style={styles.card} source={{ uri: this.props.images[this.state.num] }}>
+          <View style={styles.cardDescription}>
+            <View style={styles.cardInfo}>
+              <Text style={styles.bold}>{this.props.name}</Text>
+              <Text>{this.props.aboutMe}</Text>
             </View>
-          </ImageBackground>
-        </TouchableOpacity>
+          </View>
+        </ImageBackground>
+      </TouchableOpacity>
     )
   }
 }

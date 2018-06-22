@@ -224,17 +224,28 @@ export function addAnimal(state, props) {
 
 export function deleteAnimal(element, state) {
   return function (dispatch) {
-    console.log(element);
-    console.log(state);
-    var array = state;
-    if (element > -1) {
-      state.splice(element, 1);
-      firebase
-        .database()
-        .ref("cards/" + firebase.auth().currentUser.uid + "/animals")
-        .set(array);
-      dispatch({ type: "ANIMAL_ADD", payload: array });
-    }
+    Alert.alert(
+      "Você tem certeza que deseja apagar ?",
+      "",
+      [
+        {
+          text: "Sim",
+          onPress: () => {
+            var array = state;
+            if (element > -1) {
+              state.splice(element, 1);
+              firebase
+                .database()
+                .ref("cards/" + firebase.auth().currentUser.uid + "/animals")
+                .set(array);
+              dispatch({ type: "ANIMAL_ADD", payload: array });
+            }
+          }
+        },
+        { text: "Não", onPress: () => console.log("Cancel Pressed") }
+      ],
+      { cancelable: true }
+    );
   };
 }
 
@@ -253,12 +264,19 @@ export function getCards(geocode) {
       .equalTo(geocode)
       .once("value", snap => {
         var items = [];
+        var animals = [];
         snap.forEach(child => {
           item = child.val();
           item.id = child.key;
+          item.animals.forEach(animal => {
+            // console.log(animal);
+            animal.userId = item.id;
+            animals.push(animal);
+          });
           items.push(item);
         });
-        dispatch({ type: "GET_CARDS", payload: items });
+        console.log(animals);
+        dispatch({ type: "GET_CARDS", payload: animals });
       });
   };
 }

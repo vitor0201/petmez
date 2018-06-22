@@ -3,18 +3,20 @@ import { connect } from "react-redux";
 import { Ionicons } from "@expo/vector-icons";
 import styles from "../styles";
 import { deleteAnimal, updateAbout, logout } from "../redux/actions";
-
 import {
   Text,
   View,
   Image,
   Alert,
   TouchableOpacity,
-  TextInput,
-  ScrollView
+  TextInput
 } from "react-native";
 
 class Profile extends React.Component {
+
+  state = {
+    telephone: "",
+  };
   // deleteImage() {
   //   this.self.props.dispatch(
   //     deleteImage(this.self.props.user.images, this.key)
@@ -26,8 +28,6 @@ class Profile extends React.Component {
   // }
 
   alertMenu() {
-    console.log(this.self.props.user.animals);
-    console.log(this.key);
     Alert.alert(
       "Opções",
       "",
@@ -46,22 +46,20 @@ class Profile extends React.Component {
   }
 
   updatePhone() {
-    this.self.props.dispatch(updateAbout(this.text));
+    console.log.log('update');
+  //   console.log(this);
+  //   this.validate({
+  //     nome: { minlength: 3, maxlength: 30, required: true },
+  //     tipo: { required: true },
+  //     sexo: { required: true },
+  //     tamanho: { required: true }
+  //   });
 
+  //  if(this.getErrorMessages() == "") {
+  //   this.self.props.dispatch(updateAbout(this.text));
+  //   }
   }
-  deleteConfirm() {
-    Alert.alert(
-      "Você tem certeza que deseja apagar ?",
-      "",
-      [
-        {
-          text: "Sim"
-        },
-        { text: "Não", onPress: () => console.log("Cancel Pressed") }
-      ],
-      { cancelable: true }
-    );
-  }
+
   render() {
     return (
       <View style={styles.container}>
@@ -102,10 +100,12 @@ class Profile extends React.Component {
           <TextInput
             style={styles.inputStyle}
             keyboardType='numeric'
+            // onChangeText={(telephone) => this.setState({telephone})}
+            onChangeText={(telephone) => this.updatePhone.bind({telephone})}
+            value={this.state.telephone}
             // onChangeText={text => this.props.dispatch(updateAbout(text))}
-            onChangeText={text => this.bind.updatePhone({ self: this, text })}
-            value={this.props.user.aboutMe
-            }
+            // value={this.props.user.aboutMe}
+            // value={this.props.user.aboutMe}
           />
         </View>
         <View style={styles.container}>

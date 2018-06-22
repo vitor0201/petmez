@@ -46,11 +46,25 @@ class Home extends React.Component {
       }
     });
   }
+  // <SwipeCards
+  //   cards={this.props.cards}
+  //   stack={false}
+  //   renderCard={(cardData) => <Cards {...cardData} />}
+  //   renderNoMoreCards={() => <NoCards />}
+  //   showYup={false}
+  //   showNope={false}
+  //   handleYup={this.handleYup.bind(this)}
+  //   handleNope={this.handleNope.bind(this)}
+  //   handleMaybe={this.handleMaybe}
+  //   hasMaybeAction={false} />
 
   render() {
+    console.log(this.props.cardsAnimals);
+    console.log(this.props.cards);
+
     return (
       <SwipeCards
-        cards={this.props.cards}
+        cards={this.props.cardsAnimals}
         stack={false}
         renderCard={(cardData) => <Cards {...cardData} />}
         renderNoMoreCards={() => <NoCards />}
@@ -67,6 +81,7 @@ class Home extends React.Component {
 function mapStateToProps(state) {
   return {
     cards: state.cards,
+    cardsAnimals: state.cardsAnimals,
     user: state.user
   };
 }
