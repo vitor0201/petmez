@@ -20,7 +20,8 @@ class Home extends React.Component {
   }
 
   handleYup(card) {
-    firebase.database().ref('cards/' + this.props.user.id + '/swipes').update({ [card.id]: true });
+    card.match = true;
+    firebase.database().ref('cards/' + this.props.user.id + '/swipes').update({ [card.id]: card });
     this.checkMatch(card)
   }
 
@@ -29,39 +30,47 @@ class Home extends React.Component {
   }
 
   checkMatch(card) {
-    firebase.database().ref('cards/' + card.id + '/swipes/' + this.props.user.id).once('value', (snap) => {
-      if (snap.val() == true) {
-        var me = {
-          id: this.props.user.id,
-          photoUrl: this.props.user.photoUrl,
-          name: this.props.user.name
-        }
-        var user = {
-          id: card.id,
-          photoUrl: card.photoUrl,
-          name: card.name
-        }
-        firebase.database().ref('cards/' + this.props.user.id + '/chats/' + card.id).set({ user: user });
-        firebase.database().ref('cards/' + card.id + '/chats/' + this.props.user.id).set({ user: me });
-      }
-    });
+
+    console.log(card);
+    console.log(this.props.user);
+    var me = {
+      id: this.props.user.id,
+      photoUrl: this.props.user.photoUrl,
+      name: this.props.user.name
+    }
+    var user = {
+      id: card.userId,
+      photoUrl: card.imgUri[0],
+      name: card.nome
+    }
+    console.log(me);
+    console.log(user);
+    firebase.database().ref('cards/' + this.props.user.id + '/chats/' + card.id ).set({ user: user });
+    firebase.database().ref('cards/' + card.userId + '/chats/' + this.props.user.id).set({ user: me });
+
+
+
+    // console.log(card);
+    
+    // firebase.database().ref('cards/' + card.id + '/swipes/' + this.props.user.id).once('value', (snap) => {
+    //   if (snap.val() == true) {
+    //     var me = {
+    //       id: this.props.user.id,
+    //       photoUrl: this.props.user.photoUrl,
+    //       name: this.props.user.name
+    //     }
+    //     var user = {
+    //       id: card.id,
+    //       photoUrl: card.photoUrl,
+    //       name: card.name
+    //     }
+    //     firebase.database().ref('cards/' + this.props.user.id + '/chats/' + card.id).set({ user: user });
+    //     firebase.database().ref('cards/' + card.id + '/chats/' + this.props.user.id).set({ user: me });
+    //   }
+    // });
   }
-  // <SwipeCards
-  //   cards={this.props.cards}
-  //   stack={false}
-  //   renderCard={(cardData) => <Cards {...cardData} />}
-  //   renderNoMoreCards={() => <NoCards />}
-  //   showYup={false}
-  //   showNope={false}
-  //   handleYup={this.handleYup.bind(this)}
-  //   handleNope={this.handleNope.bind(this)}
-  //   handleMaybe={this.handleMaybe}
-  //   hasMaybeAction={false} />
-
+  
   render() {
-    console.log(this.props.cardsAnimals);
-    console.log(this.props.cards);
-
     return (
       <SwipeCards
         cards={this.props.cardsAnimals}

@@ -15,7 +15,7 @@ class Cards extends React.Component {
 
   nextPhoto() {
     var num = this.state.num
-    var length = this.props.images.length - 1
+    var length = this.props.imgUri.length - 1
     if (num >= length) {
       this.setState({ num: 0 })
     } else {
@@ -29,10 +29,11 @@ class Cards extends React.Component {
     console.log(this.props);
     return (
       <TouchableOpacity onPress={() => this.nextPhoto()}>
-        <ImageBackground style={styles.card} source={{ uri: this.props.images[this.state.num] }}>
+        <ImageBackground style={styles.card} source={{ uri: this.props.imgUri[this.state.num] }}>
           <View style={styles.cardDescription}>
             <View style={styles.cardInfo}>
-              <Text style={styles.bold}>{this.props.name}</Text>
+              <Text style={styles.bold}>{this.props.nome}</Text>
+              <Text>{this.props.sexo}</Text>
               <Text>{this.props.aboutMe}</Text>
             </View>
           </View>

@@ -268,11 +268,13 @@ export function getCards(geocode) {
         snap.forEach(child => {
           item = child.val();
           item.id = child.key;
-          item.animals.forEach(animal => {
-            // console.log(animal);
-            animal.userId = item.id;
-            animals.push(animal);
-          });
+          if (item.animals) {
+            item.animals.forEach(animal => {
+              // console.log(animal);
+              animal.userId = item.id;
+              animals.push(animal);
+            });
+          }
           items.push(item);
         });
         console.log(animals);
