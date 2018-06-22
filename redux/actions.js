@@ -209,6 +209,7 @@ export function addAnimal(state, props) {
         nome: state.nome,
         sexo: state.sexo,
         tamanho: state.tamanho,
+        tipo: state.tipo,
         imgUri: e
       };
       array.push(newAnimal);
