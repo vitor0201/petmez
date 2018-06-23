@@ -34,7 +34,7 @@ class Cards extends React.Component {
             <View style={styles.cardInfo}>
               <Text style={styles.bold}>{this.props.nome}</Text>
               <Text>{this.props.sexo}</Text>
-              <Text>{this.props.aboutMe}</Text>
+              <Text>{this.props.tamanho}</Text>
             </View>
           </View>
         </ImageBackground>

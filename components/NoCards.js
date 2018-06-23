@@ -10,7 +10,7 @@ class NoCards extends React.Component {
   render() {
     return (
       <View>
-        <Text>No more cards</Text>
+        <Text>Sem Animais  =/</Text>
       </View>
     )
   }

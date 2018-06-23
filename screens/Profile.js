@@ -2,31 +2,17 @@ import React from "react";
 import { connect } from "react-redux";
 import { Ionicons } from "@expo/vector-icons";
 import styles from "../styles";
-import { deleteAnimal, updateAbout, logout } from "../redux/actions";
+import { deleteAnimal, filterUpdate, logout } from "../redux/actions";
 import {
   Text,
   View,
   Image,
   Alert,
   TouchableOpacity,
-  TextInput
+  Picker
 } from "react-native";
 
 class Profile extends React.Component {
-
-  state = {
-    telephone: "",
-  };
-  // deleteImage() {
-  //   this.self.props.dispatch(
-  //     deleteImage(this.self.props.user.images, this.key)
-  //   );
-  // }
-
-  // addImage() {
-  //   this.props.dispatch(uploadImages(this.props.user.images));
-  // }
-
   alertMenu() {
     Alert.alert(
       "Opções",
@@ -38,26 +24,13 @@ class Profile extends React.Component {
         },
         {
           text: "Apagar",
-          onPress: this.self.props.dispatch(deleteAnimal(this.key, this.self.props.user.animals)),
+          onPress: this.self.props.dispatch(
+            deleteAnimal(this.key, this.self.props.user.animals)
+          )
         }
       ],
       { cancelable: true }
     );
-  }
-
-  updatePhone() {
-    console.log.log('update');
-  //   console.log(this);
-  //   this.validate({
-  //     nome: { minlength: 3, maxlength: 30, required: true },
-  //     tipo: { required: true },
-  //     sexo: { required: true },
-  //     tamanho: { required: true }
-  //   });
-
-  //  if(this.getErrorMessages() == "") {
-  //   this.self.props.dispatch(updateAbout(this.text));
-  //   }
   }
 
   render() {
@@ -96,17 +69,19 @@ class Profile extends React.Component {
               <Ionicons name="ios-add" size={75} style={styles.isRed} />
             </TouchableOpacity>
           </View>
-          <Text style={styles.bold}>Telefone</Text>
-          <TextInput
+          <Text style={styles.bold}>Animal Desejado</Text>
+          <Picker
             style={styles.inputStyle}
-            keyboardType='numeric'
-            // onChangeText={(telephone) => this.setState({telephone})}
-            onChangeText={(telephone) => this.updatePhone.bind({telephone})}
-            value={this.state.telephone}
-            // onChangeText={text => this.props.dispatch(updateAbout(text))}
-            // value={this.props.user.aboutMe}
-            // value={this.props.user.aboutMe}
-          />
+            selectedValue={this.props.user.filter}
+            onValueChange={tipo => this.props.dispatch(filterUpdate(tipo))}
+          >
+            <Picker.Item label="Todos" value="todos" />
+            <Picker.Item label="Canino" value="canino" />
+            <Picker.Item label="Felino" value="felino" />
+            <Picker.Item label="Ave" value="ave" />
+            <Picker.Item label="Peixe" value="peixe" />
+            <Picker.Item label="Outro" value="outro" />
+          </Picker>
         </View>
         <View style={styles.container}>
           <TouchableOpacity onPress={() => this.props.dispatch(logout())}>

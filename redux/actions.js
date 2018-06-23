@@ -4,7 +4,7 @@ import { ImagePicker, Location, Permissions, Notifications } from "expo";
 import Geohash from "latlon-geohash";
 
 export function login(user) {
-  return function (dispatch) {
+  return function(dispatch) {
     let params = {
       id: user.uid,
       photoUrl: user.photoURL,
@@ -12,6 +12,7 @@ export function login(user) {
       aboutMe: " ",
       chats: " ",
       geocode: " ",
+      filter: "todos",
       images: [user.photoURL],
       notification: false,
       show: false,
@@ -27,7 +28,7 @@ export function login(user) {
       .database()
       .ref("cards/")
       .child(user.uid)
-      .once("value", function (snapshot) {
+      .once("value", function(snapshot) {
         if (snapshot.val() !== null) {
           dispatch({ type: "LOGIN", user: snapshot.val(), loggedIn: true });
           dispatch(allowNotification());
@@ -44,10 +45,10 @@ export function login(user) {
 }
 
 export function allowNotification() {
-  return function (dispatch) {
-    Permissions.getAsync(Permissions.NOTIFICATIONS).then(function (result) {
+  return function(dispatch) {
+    Permissions.getAsync(Permissions.NOTIFICATIONS).then(function(result) {
       if (result.status === "granted") {
-        Notifications.getExpoPushTokenAsync().then(function (token) {
+        Notifications.getExpoPushTokenAsync().then(function(token) {
           firebase
             .database()
             .ref("cards/" + firebase.auth().currentUser.uid)
@@ -58,9 +59,17 @@ export function allowNotification() {
     });
   };
 }
-
+export function filterUpdate(filter) {
+  return function(dispatch) {
+    dispatch({ type: "FILTER_UPDATE", payload: filter });
+    firebase
+      .database()
+      .ref("cards/" + firebase.auth().currentUser.uid)
+      .update({ filter: filter });
+  };
+}
 export function sendNotification(id, name, text) {
-  return function (dispatch) {
+  return function(dispatch) {
     firebase
       .database()
       .ref("cards/" + id)
@@ -84,10 +93,10 @@ export function sendNotification(id, name, text) {
   };
 }
 export function getLocation() {
-  return function (dispatch) {
-    Permissions.askAsync(Permissions.LOCATION).then(function (result) {
+  return function(dispatch) {
+    Permissions.askAsync(Permissions.LOCATION).then(function(result) {
       if (result) {
-        Location.getCurrentPositionAsync({}).then(function (location) {
+        Location.getCurrentPositionAsync({}).then(function(location) {
           var geocode = Geohash.encode(
             location.coords.latitude,
             location.coords.longitude,
@@ -109,8 +118,8 @@ export function getLocation() {
  * TODO: Transformar uploadImages(images) em função pura
  */
 export function uploadImages(images) {
-  return function (dispatch) {
-    ImagePicker.launchImageLibraryAsync({ allowsEditing: false }).then(function (
+  return function(dispatch) {
+    ImagePicker.launchImageLibraryAsync({ allowsEditing: false }).then(function(
       result
     ) {
       if (!result.cancelled) {
@@ -146,7 +155,7 @@ uploadImageHelper = async (uri, imageName) => {
 };
 
 export function deleteImage(images, key) {
-  return function (dispatch) {
+  return function(dispatch) {
     Alert.alert(
       "Are you sure you want to Delete",
       "",
@@ -171,9 +180,9 @@ export function deleteImage(images, key) {
 }
 
 export function updateAbout(value) {
-  return function (dispatch) {
+  return function(dispatch) {
     dispatch({ type: "UPDATE_ABOUT", payload: value });
-    setTimeout(function () {
+    setTimeout(function() {
       firebase
         .database()
         .ref("cards/" + firebase.auth().currentUser.uid)
@@ -183,7 +192,7 @@ export function updateAbout(value) {
 }
 
 export function addAnimal(state, props) {
-  return function (dispatch) {
+  return function(dispatch) {
     var helper = 0;
     console.log(props);
     var array = [];
@@ -224,7 +233,7 @@ export function addAnimal(state, props) {
 }
 
 export function deleteAnimal(element, state) {
-  return function (dispatch) {
+  return function(dispatch) {
     Alert.alert(
       "Você tem certeza que deseja apagar ?",
       "",
@@ -251,32 +260,41 @@ export function deleteAnimal(element, state) {
 }
 
 export function logout() {
-  return function (dispatch) {
+  return function(dispatch) {
     firebase.auth().signOut();
     dispatch({ type: "LOGOUT", loggedIn: false });
   };
 }
-export function getCards(geocode) {
-  return function (dispatch) {
+export function getCards(state) {
+  return function(dispatch) {
+    var geocode = state.geocode;
+    var filter = state.filter;
+    var id = state.id;
+    
     firebase
       .database()
       .ref("cards")
       .orderByChild("geocode")
       .equalTo(geocode)
-      .once("value", snap => {
-        var items = [];
+      .on("value", snap => {
         var animals = [];
         snap.forEach(child => {
           item = child.val();
           item.id = child.key;
-          if (item.animals) {
+          if (item.animals && item.id != id) {
             item.animals.forEach(animal => {
               // console.log(animal);
-              animal.userId = item.id;
-              animals.push(animal);
+              console.log(filter);
+              console.log(animal.tipo);
+              if (
+                filter.toLowerCase() === "todos" ||
+                filter.toLowerCase() === animal.tipo.toLowerCase()
+              ) {
+                animal.userId = item.id;
+                animals.push(animal);
+              }
             });
           }
-          items.push(item);
         });
         console.log(animals);
         dispatch({ type: "GET_CARDS", payload: animals });
