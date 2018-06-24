@@ -52,7 +52,7 @@ class Home extends React.Component {
     };
     firebase
       .database()
-      .ref("cards/" + this.props.user.id + "/chats/" + card.id)
+      .ref("cards/" + this.props.user.id + "/chats/" + card.userId)
       .set({ user: user });
     firebase
       .database()

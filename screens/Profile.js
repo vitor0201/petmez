@@ -15,19 +15,16 @@ import {
 class Profile extends React.Component {
   alertMenu() {
     Alert.alert(
-      "Opções",
+      "Deseja Apagar:",
       "",
       [
-        {
-          text: "Modificar",
-          onPress: () => console.log("Ask me later pressed")
-        },
         {
           text: "Apagar",
           onPress: this.self.props.dispatch(
             deleteAnimal(this.key, this.self.props.user.animals)
           )
-        }
+        },
+        { text: "Cancelar", onPress: () => console.log("Cancel Pressed") }
       ],
       { cancelable: true }
     );

@@ -267,6 +267,7 @@ export function logout() {
 }
 export function getCards(state) {
   return function(dispatch) {
+    console.log(getCards);
     var geocode = state.geocode;
     var filter = state.filter;
     var id = state.id;
@@ -279,13 +280,15 @@ export function getCards(state) {
       .on("value", snap => {
         var animals = [];
         snap.forEach(child => {
+
           item = child.val();
+          console.log(item);
           item.id = child.key;
           if (item.animals && item.id != id) {
             item.animals.forEach(animal => {
               // console.log(animal);
-              console.log(filter);
-              console.log(animal.tipo);
+              // console.log(filter);
+              // console.log(animal.tipo);
               if (
                 filter.toLowerCase() === "todos" ||
                 filter.toLowerCase() === animal.tipo.toLowerCase()
@@ -296,7 +299,7 @@ export function getCards(state) {
             });
           }
         });
-        console.log(animals);
+        // console.log(animals);
         dispatch({ type: "GET_CARDS", payload: animals });
       });
   };
