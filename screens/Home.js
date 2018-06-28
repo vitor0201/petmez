@@ -45,6 +45,7 @@ class Home extends React.Component {
   }
 
   checkMatch(card) {
+    console.log(this.props)
     var me = {
       id: this.props.user.id,
       photoUrl: this.props.user.photoUrl,
@@ -55,15 +56,9 @@ class Home extends React.Component {
       photoUrl: card.imgUri[0],
       name: card.nome
     };
-    firebase
-      .database()
-      .ref("cards/" + this.props.user.id + "/chats/" + card.id)
-      .set({ user: user });
-    firebase
-      .database()
-      .ref("cards/" + card.userId + "/chats/" + this.props.user.id)
-      .set({ user: me });
-  }
+    firebase.database().ref('cards/' + this.props.user.id + '/chats/' + card.id ).set({ user: user });
+    firebase.database().ref('cards/' + card.userId + '/chats/' + this.props.user.id).set({ user: me });
+
 
   render() {
     return (
