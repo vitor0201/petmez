@@ -29,6 +29,7 @@ class Home extends React.Component {
       .database()
       .ref("cards/" + this.props.user.id + "/swipes")
       .update({ [card.id]: card });
+    console.log(this.props.user);
     this.props.dispatch(match(card.id, this.props.user));
     this.checkMatch(card);
   }
@@ -62,6 +63,8 @@ class Home extends React.Component {
   }
 
   render() {
+    console.log(this.props.user);
+
     return (
       <SwipeCards
         cards={this.props.cardsAnimals}

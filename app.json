@@ -2,11 +2,11 @@
   "expo": {
     "sdkVersion": "26.0.0",
     "facebookAppId": "1711396202232786",
-    "facebookDisplayName": "PetMe",
+    "facebookDisplayName": "PetMez",
     "icon": "./assets/icon.png",
     "version": "1.0",
-    "name": "PetMe",
-    "slug": "petme",
+    "name": "PetMez",
+    "slug": "petmez",
     "splash": {
       "image": "./assets/icon.png"
     },
@@ -17,7 +17,7 @@
       }
     },
     "android": {
-      "package": "com.greycat.petme"
+      "package": "com.greycat.petmez"
     }
   }
 }

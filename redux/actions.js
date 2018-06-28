@@ -8,7 +8,8 @@ import Geohash from "latlon-geohash";
  * @param {*} user 
  */
 export function login(user) {
-  return function(dispatch) {
+  return function (dispatch) {
+
     let params = {
       id: user.uid,
       photoUrl: user.photoURL,
@@ -20,7 +21,7 @@ export function login(user) {
       images: [user.photoURL],
       notification: false,
       show: false,
-      match: [],
+      matches: [],
       report: false,
       animals: [],
       swipes: {
@@ -33,7 +34,7 @@ export function login(user) {
       .database()
       .ref("cards/")
       .child(user.uid)
-      .once("value", function(snapshot) {
+      .once("value", function (snapshot) {
         if (snapshot.val() !== null) {
           dispatch({ type: "LOGIN", user: snapshot.val(), loggedIn: true });
           dispatch(allowNotification());
@@ -52,10 +53,10 @@ export function login(user) {
  * Função que solicita notificação para verificar quando mensagem
  */
 export function allowNotification() {
-  return function(dispatch) {
-    Permissions.getAsync(Permissions.NOTIFICATIONS).then(function(result) {
+  return function (dispatch) {
+    Permissions.getAsync(Permissions.NOTIFICATIONS).then(function (result) {
       if (result.status === "granted") {
-        Notifications.getExpoPushTokenAsync().then(function(token) {
+        Notifications.getExpoPushTokenAsync().then(function (token) {
           firebase
             .database()
             .ref("cards/" + firebase.auth().currentUser.uid)
@@ -71,7 +72,7 @@ export function allowNotification() {
  * @param {*} filter 
  */
 export function filterUpdate(filter) {
-  return function(dispatch) {
+  return function (dispatch) {
     dispatch({ type: "FILTER_UPDATE", payload: filter });
     firebase
       .database()
@@ -85,18 +86,20 @@ export function filterUpdate(filter) {
  * @param {*} state 
  */
 export function match(card, state) {
-  return function(dispatch) {
-    if(!state.match){
-        state.match = [];
+  return function (dispatch) {
+
+    if (!state.matches) {
+      state.matches = [];
     }
-    console.log(state.match);
-    console.log(card);
-    state.match.push(card);
-    dispatch({ type: "MATCH_CARD", payload: state.match });
-    // firebase
-    //   .database()
-    //   .ref("cards/" + this.props.user.id + "/matches")
-    //   .update({ [card]: card });
+    var matches = state.matches;
+    matches.push(card);
+
+    console.log(matches);
+    dispatch({ type: "MATCH_CARD", payload: matches });
+    firebase
+      .database()
+      .ref("cards/" + state.id + '/matches/')
+      .update(matches);
   };
 }
 /**
@@ -106,7 +109,7 @@ export function match(card, state) {
  * @param {*} text 
  */
 export function sendNotification(id, name, text) {
-  return function(dispatch) {
+  return function (dispatch) {
     firebase
       .database()
       .ref("cards/" + id)
@@ -133,10 +136,10 @@ export function sendNotification(id, name, text) {
  * Função que pega e permite as notificações
  */
 export function getLocation() {
-  return function(dispatch) {
-    Permissions.askAsync(Permissions.LOCATION).then(function(result) {
+  return function (dispatch) {
+    Permissions.askAsync(Permissions.LOCATION).then(function (result) {
       if (result) {
-        Location.getCurrentPositionAsync({}).then(function(location) {
+        Location.getCurrentPositionAsync({}).then(function (location) {
           var geocode = Geohash.encode(
             location.coords.latitude,
             location.coords.longitude,
@@ -158,8 +161,8 @@ export function getLocation() {
  * TODO: Transformar uploadImages(images) em função pura
  */
 export function uploadImages(images) {
-  return function(dispatch) {
-    ImagePicker.launchImageLibraryAsync({ allowsEditing: false }).then(function(
+  return function (dispatch) {
+    ImagePicker.launchImageLibraryAsync({ allowsEditing: false }).then(function (
       result
     ) {
       if (!result.cancelled) {
@@ -201,7 +204,7 @@ uploadImageHelper = async (uri, imageName) => {
  * @param {*} props 
  */
 export function addAnimal(state, props) {
-  return function(dispatch) {
+  return function (dispatch) {
     var helper = 0;
     console.log(props);
     var array = [];
@@ -246,7 +249,7 @@ export function addAnimal(state, props) {
  * @param {*} state 
  */
 export function deleteAnimal(element, state) {
-  return function(dispatch) {
+  return function (dispatch) {
     Alert.alert(
       "Você tem certeza que deseja apagar ?",
       "",
@@ -275,7 +278,7 @@ export function deleteAnimal(element, state) {
  * Função para deslogar
  */
 export function logout() {
-  return function(dispatch) {
+  return function (dispatch) {
     firebase.auth().signOut();
     dispatch({ type: "LOGOUT", loggedIn: false });
   };
@@ -285,11 +288,14 @@ export function logout() {
  * @param {*} state 
  */
 export function getCards(state) {
-  return function(dispatch) {
-    console.log(getCards);
+  return function (dispatch) {
+
     var geocode = state.geocode;
     var filter = state.filter;
     var id = state.id;
+    var matches = state.matches;
+
+    // console.log(state.matches.includes('ORNITORRINCO'));
 
     firebase
       .database()
@@ -304,12 +310,12 @@ export function getCards(state) {
           item.id = child.key;
           if (item.animals && item.id != id) {
             item.animals.forEach(animal => {
-              console.log(animal);
+
               // console.log(filter);
               // console.log(animal.tipo);
-              if (
-                filter.toLowerCase() === "todos" ||
-                filter.toLowerCase() === animal.tipo.toLowerCase()
+              if (((matches) ? !matches.includes(animal.id) : true) &&
+                (filter.toLowerCase() === "todos" ||
+                  filter.toLowerCase() === animal.tipo.toLowerCase())
               ) {
                 animal.userId = item.id;
                 animals.push(animal);
@@ -317,7 +323,7 @@ export function getCards(state) {
             });
           }
         });
-        console.log(animals);
+        // console.log(animals);
         dispatch({ type: "GET_CARDS", payload: animals });
       });
   };

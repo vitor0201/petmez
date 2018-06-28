@@ -8,8 +8,8 @@ export default (reducers = (
       photoUrl: "",
       name: "",
       aboutMe: " ",
-      match:[],
-      filtre: "canino",
+      matches:[],
+      filtre: "todos",
       chats: " ",
       geocode: " ",
       images: [],
@@ -28,7 +28,7 @@ export default (reducers = (
       return { ...state, user: action.user, loggedIn: action.loggedIn };
     }
     case "MATCH_CARD": {
-      return{...state, user: { ...state.user, animals: action.payload }}
+      return{...state, user: { ...state.user, matches: action.payload }}
     }
     case "FILTER_UPDATE": {
       return { ...state,  user: { ...state.user, filter: action.payload } };
