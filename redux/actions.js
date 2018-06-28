@@ -3,6 +3,10 @@ import { Alert } from "react-native";
 import { ImagePicker, Location, Permissions, Notifications } from "expo";
 import Geohash from "latlon-geohash";
 
+/**
+ * Função que cria o state e verifica o login
+ * @param {*} user 
+ */
 export function login(user) {
   return function(dispatch) {
     let params = {
@@ -16,6 +20,7 @@ export function login(user) {
       images: [user.photoURL],
       notification: false,
       show: false,
+      match: [],
       report: false,
       animals: [],
       swipes: {
@@ -43,7 +48,9 @@ export function login(user) {
       });
   };
 }
-
+/**
+ * Função que solicita notificação para verificar quando mensagem
+ */
 export function allowNotification() {
   return function(dispatch) {
     Permissions.getAsync(Permissions.NOTIFICATIONS).then(function(result) {
@@ -59,6 +66,10 @@ export function allowNotification() {
     });
   };
 }
+/**
+ * Função que faz filtro do animal
+ * @param {*} filter 
+ */
 export function filterUpdate(filter) {
   return function(dispatch) {
     dispatch({ type: "FILTER_UPDATE", payload: filter });
@@ -68,6 +79,32 @@ export function filterUpdate(filter) {
       .update({ filter: filter });
   };
 }
+/**
+ * Função que verifica se existe o match
+ * @param {*} card 
+ * @param {*} state 
+ */
+export function match(card, state) {
+  return function(dispatch) {
+    if(!state.match){
+        state.match = [];
+    }
+    console.log(state.match);
+    console.log(card);
+    state.match.push(card);
+    dispatch({ type: "MATCH_CARD", payload: state.match });
+    // firebase
+    //   .database()
+    //   .ref("cards/" + this.props.user.id + "/matches")
+    //   .update({ [card]: card });
+  };
+}
+/**
+ * Função que quando existe a conversa envia mensagem
+ * @param {*} id 
+ * @param {*} name 
+ * @param {*} text 
+ */
 export function sendNotification(id, name, text) {
   return function(dispatch) {
     firebase
@@ -92,6 +129,9 @@ export function sendNotification(id, name, text) {
       });
   };
 }
+/**
+ * Função que pega e permite as notificações
+ */
 export function getLocation() {
   return function(dispatch) {
     Permissions.askAsync(Permissions.LOCATION).then(function(result) {
@@ -141,7 +181,9 @@ export function uploadImages(images) {
     });
   };
 }
-
+/**
+ * Auxilia o upload de imagens
+ */
 uploadImageHelper = async (uri, imageName) => {
   const response = await fetch(uri);
   const blob = await response.blob();
@@ -153,44 +195,11 @@ uploadImageHelper = async (uri, imageName) => {
   const snapshot = await ref.put(blob);
   return snapshot.downloadURL;
 };
-
-export function deleteImage(images, key) {
-  return function(dispatch) {
-    Alert.alert(
-      "Are you sure you want to Delete",
-      "",
-      [
-        {
-          text: "Ok",
-          onPress: () => {
-            var array = images;
-            array.splice(key, 1);
-            dispatch({ type: "UPLOAD_IMAGES", payload: array });
-            firebase
-              .database()
-              .ref("cards/" + firebase.auth().currentUser.uid + "/images")
-              .set(array);
-          }
-        },
-        { text: "Cancel", onPress: () => console.log("Cancel Pressed") }
-      ],
-      { cancelable: true }
-    );
-  };
-}
-
-export function updateAbout(value) {
-  return function(dispatch) {
-    dispatch({ type: "UPDATE_ABOUT", payload: value });
-    setTimeout(function() {
-      firebase
-        .database()
-        .ref("cards/" + firebase.auth().currentUser.uid)
-        .update({ aboutMe: value });
-    }, 3000);
-  };
-}
-
+/**
+ * Função para adicionar animal
+ * @param {*} state 
+ * @param {*} props 
+ */
 export function addAnimal(state, props) {
   return function(dispatch) {
     var helper = 0;
@@ -231,7 +240,11 @@ export function addAnimal(state, props) {
     });
   };
 }
-
+/**
+ * Função para deletar animal
+ * @param {*} element 
+ * @param {*} state 
+ */
 export function deleteAnimal(element, state) {
   return function(dispatch) {
     Alert.alert(
@@ -258,20 +271,26 @@ export function deleteAnimal(element, state) {
     );
   };
 }
-
+/**
+ * Função para deslogar
+ */
 export function logout() {
   return function(dispatch) {
     firebase.auth().signOut();
     dispatch({ type: "LOGOUT", loggedIn: false });
   };
 }
+/**
+ * Função que pega os cartões, verificando se já houve anteriormente o match
+ * @param {*} state 
+ */
 export function getCards(state) {
   return function(dispatch) {
     console.log(getCards);
     var geocode = state.geocode;
     var filter = state.filter;
     var id = state.id;
-    
+
     firebase
       .database()
       .ref("cards")
@@ -280,13 +299,12 @@ export function getCards(state) {
       .on("value", snap => {
         var animals = [];
         snap.forEach(child => {
-
           item = child.val();
           console.log(item);
           item.id = child.key;
           if (item.animals && item.id != id) {
             item.animals.forEach(animal => {
-              // console.log(animal);
+              console.log(animal);
               // console.log(filter);
               // console.log(animal.tipo);
               if (
@@ -299,7 +317,7 @@ export function getCards(state) {
             });
           }
         });
-        // console.log(animals);
+        console.log(animals);
         dispatch({ type: "GET_CARDS", payload: animals });
       });
   };

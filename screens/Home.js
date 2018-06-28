@@ -2,7 +2,7 @@ import React from "react";
 import styles from "../styles";
 import * as firebase from "firebase";
 import { connect } from "react-redux";
-import { getCards } from "../redux/actions";
+import { getCards, match } from "../redux/actions";
 import SwipeCards from "react-native-swipe-cards";
 import Cards from "../components/Cards.js";
 import NoCards from "../components/NoCards.js";
@@ -29,6 +29,7 @@ class Home extends React.Component {
       .database()
       .ref("cards/" + this.props.user.id + "/swipes")
       .update({ [card.id]: card });
+    this.props.dispatch(match(card.id, this.props.user));
     this.checkMatch(card);
   }
 
@@ -82,6 +83,7 @@ function mapStateToProps(state) {
   return {
     cards: state.cards,
     cardsAnimals: state.cardsAnimals,
+    match: state.user.match,
     user: state.user
   };
 }

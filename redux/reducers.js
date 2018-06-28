@@ -8,6 +8,7 @@ export default (reducers = (
       photoUrl: "",
       name: "",
       aboutMe: " ",
+      match:[],
       filtre: "canino",
       chats: " ",
       geocode: " ",
@@ -25,6 +26,9 @@ export default (reducers = (
   switch (action.type) {
     case "LOGIN": {
       return { ...state, user: action.user, loggedIn: action.loggedIn };
+    }
+    case "MATCH_CARD": {
+      return{...state, user: { ...state.user, animals: action.payload }}
     }
     case "FILTER_UPDATE": {
       return { ...state,  user: { ...state.user, filter: action.payload } };
