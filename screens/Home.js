@@ -14,6 +14,9 @@ class Home extends React.Component {
     this.didFocusListener.remove();
   }
 
+  // componentDidMount() {
+  //   this.didFocusListener.remove();
+  // }
   componentWillMount() {
     this.didFocusListener = this.props.navigation.addListener(
       "didFocus",
@@ -54,7 +57,7 @@ class Home extends React.Component {
     };
     firebase
       .database()
-      .ref("cards/" + this.props.user.id + "/chats/" + card.userId)
+      .ref("cards/" + this.props.user.id + "/chats/" + card.id)
       .set({ user: user });
     firebase
       .database()
@@ -63,8 +66,6 @@ class Home extends React.Component {
   }
 
   render() {
-    console.log(this.props.user);
-
     return (
       <SwipeCards
         cards={this.props.cardsAnimals}
