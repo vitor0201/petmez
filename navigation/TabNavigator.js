@@ -3,9 +3,7 @@ import Home from '../screens/Home';
 import Profile from '../screens/Profile';
 import Matches from '../screens/Matches';
 import { TabNavigator } from 'react-navigation';
-import { Ionicons, MaterialCommunityIcons } from '@expo/vector-icons';
-import { Image } from 'react-native';
-import styles from '../styles';
+import { Ionicons } from '@expo/vector-icons';
 
 export default TabNavigator(
   {

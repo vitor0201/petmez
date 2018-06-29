@@ -1,22 +1,13 @@
-import React from "react";
-import styles from "../styles";
-import * as firebase from "firebase";
-import { connect } from "react-redux";
-import { getCards, match } from "../redux/actions";
-import SwipeCards from "react-native-swipe-cards";
-import Cards from "../components/Cards.js";
-import NoCards from "../components/NoCards.js";
-
-import { Text, View, Image } from "react-native";
+import React from 'react';
+import * as firebase from 'firebase';
+import { connect } from 'react-redux';
+import { getCards, match } from '../redux/actions';
+import SwipeCards from 'react-native-swipe-cards';
+import Cards from '../components/Cards.js';
+import NoCards from '../components/NoCards';
 
 class Home extends React.Component {
-  componentWillUnmount() {
-    this.didFocusListener.remove();
-  }
 
-  // componentDidMount() {
-  //   this.didFocusListener.remove();
-  // }
   componentWillMount() {
     this.didFocusListener = this.props.navigation.addListener(
       "didFocus",
@@ -24,6 +15,10 @@ class Home extends React.Component {
         this.props.dispatch(getCards(this.props.user));
       }
     );
+  }
+
+  componentWillUnmount() {
+    this.didFocusListener.remove();
   }
 
   handleYup(card) {
@@ -45,13 +40,12 @@ class Home extends React.Component {
   }
 
   checkMatch(card) {
-    console.log(this.props)
-    var me = {
+    const me = {
       id: this.props.user.id,
       photoUrl: this.props.user.photoUrl,
       name: this.props.user.name
     };
-    var user = {
+    const user = {
       id: card.userId,
       photoUrl: card.imgUri[0],
       name: card.nome
@@ -73,8 +67,9 @@ class Home extends React.Component {
         stack={false}
         renderCard={cardData => <Cards {...cardData} />}
         renderNoMoreCards={() => <NoCards />}
-        showYup={false}
-        showNope={false}
+        showYup={true}
+        yupText="Quero Adotar"
+        nopeText="Nope"
         handleYup={this.handleYup.bind(this)}
         handleNope={this.handleNope.bind(this)}
         handleMaybe={this.handleMaybe}

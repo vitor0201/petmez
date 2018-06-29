@@ -1,7 +1,7 @@
-import * as firebase from "firebase";
-import { Alert } from "react-native";
-import { ImagePicker, Location, Permissions, Notifications } from "expo";
-import Geohash from "latlon-geohash";
+import * as firebase from 'firebase';
+import { Alert } from 'react-native';
+import { ImagePicker, Location, Permissions, Notifications } from 'expo';
+import Geohash from 'latlon-geohash';
 
 /**
  * Função que cria o state e verifica o login
@@ -94,7 +94,6 @@ export function match(card, state) {
     var matches = state.matches;
     matches.push(card);
 
-    console.log(matches);
     dispatch({ type: "MATCH_CARD", payload: matches });
     firebase
       .database()
@@ -206,7 +205,6 @@ uploadImageHelper = async (uri, imageName) => {
 export function addAnimal(state, props) {
   return function (dispatch) {
     var helper = 0;
-    console.log(props);
     var array = [];
     if (props.animals) {
       array = props.animals;
@@ -218,8 +216,6 @@ export function addAnimal(state, props) {
       return imgReturn;
     });
     Promise.all(promisses).then(e => {
-      console.log(state);
-      console.log(e);
       let newId = firebase
         .database()
         .ref()
@@ -293,9 +289,9 @@ export function getCards(state) {
     var geocode = state.geocode;
     var filter = state.filter;
     var id = state.id;
-    var matches = state.matches;
+    console.log(state.matches);
+    var matches = (state.matches) ? state.matches : [];
 
-    // console.log(state.matches.includes('ORNITORRINCO'));
 
     firebase
       .database()
@@ -306,24 +302,21 @@ export function getCards(state) {
         var animals = [];
         snap.forEach(child => {
           item = child.val();
-          console.log(item);
           item.id = child.key;
           if (item.animals && item.id != id) {
             item.animals.forEach(animal => {
 
               // console.log(filter);
               // console.log(animal.tipo);
-              if (((matches) ? !matches.includes(animal.id) : true) &&
-                (filter.toLowerCase() === "todos" ||
-                  filter.toLowerCase() === animal.tipo.toLowerCase())
-              ) {
+              if ((!matches.includes(animal.id)) &&
+                (filter.toLowerCase() === "todos" || filter.toLowerCase() === animal.tipo.toLowerCase())) {
                 animal.userId = item.id;
                 animals.push(animal);
               }
             });
           }
         });
-        // console.log(animals);
+        console.log(animals);
         dispatch({ type: "GET_CARDS", payload: animals });
       });
   };

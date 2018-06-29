@@ -1,32 +1,32 @@
-import React from "react";
-import { connect } from "react-redux";
-import { Ionicons } from "@expo/vector-icons";
-import styles from "../styles";
-import { deleteAnimal, filterUpdate, logout } from "../redux/actions";
+import React from 'react';
+import { connect } from 'react-redux';
+import { Ionicons } from '@expo/vector-icons';
 import {
   Text,
   View,
   Image,
   Alert,
   TouchableOpacity,
-  Picker
-} from "react-native";
+  Picker,
+} from 'react-native';
+import styles from '../styles';
+import { deleteAnimal, filterUpdate, logout } from '../redux/actions';
 
 class Profile extends React.Component {
   alertMenu() {
     Alert.alert(
-      "Deseja Apagar:",
-      "",
+      'Deseja Apagar:',
+      '',
       [
         {
-          text: "Apagar",
+          text: 'Apagar',
           onPress: this.self.props.dispatch(
             deleteAnimal(this.key, this.self.props.user.animals)
           )
         },
-        { text: "Cancelar", onPress: () => console.log("Cancel Pressed") }
+        { text: 'Cancelar', onPress: () => console.log('Cancel Pressed') }
       ],
-      { cancelable: true }
+      { cancelable: false },
     );
   }
 

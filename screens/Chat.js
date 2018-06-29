@@ -1,5 +1,4 @@
 import React from 'react';
-import styles from '../styles'
 import * as firebase from 'firebase';
 import { sendNotification } from '../redux/actions'
 import { connect } from 'react-redux';
